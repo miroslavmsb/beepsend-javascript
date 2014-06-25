@@ -566,6 +566,48 @@ beepsend.prototype = (function() {
         {
             this.api.resource('/contacts/'+contactId, "DELETE", {}, success, error);
         },
+        
+        /**
+         * Get all contacts groups for authorized connection
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {collection} collection of contact groups objects
+         * @link http://api.beepsend.com/docs.html#contacts-groups
+         */
+        contactsGroupGetAll: function(success, error)
+        {
+            this.api.resource('/contacts/groups/', "GET", {}, success, error);
+        },
+        
+        /**
+         * Get single contact group for specified group id
+         * @param {int} groupId - id of group that we want to fetch from api
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object} json object of contact group
+         * @link http://api.beepsend.com/docs.html#contacts-groups
+         */
+        contactsGroupGetById: function(groupId, success, error)
+        {
+            this.api.resource('/contacts/groups/'+groupId, "GET", {}, success, error);
+        },
+        
+        /**
+         * Get contacts groups by specified criteria
+         * @param {type} groupId - id of group that we want to fetch, if we dont want to specify group we just pass null for this param 
+         * @param {type} params - params for search criteria, this is also optional if you dont want to skip it just pass {} to function
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {collection} json groups object
+         * @link http://api.beepsend.com/docs.html#contacts-groups
+         */
+        contactsGroupGetByCriteria: function(groupId, params, success, error)
+        {
+            groupId = groupId || null;
+            params = params || {};
+            var path = (groupId != null) ? '/contacts/groups/'+groupId : '/contacts/groups/';
+            this.api.resource(path, "GET", params, success, error);
+        },
 
         getUserWallets: function(success, error)
         {
