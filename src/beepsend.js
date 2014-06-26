@@ -621,6 +621,25 @@ beepsend.prototype = (function() {
         {
             this.api.resource('/contacts/groups/', "POST", group, success, error);
         },
+        
+        /**
+         * Update contacts group
+         * @param {int} groupId - id of contacts group that we want to update
+         * @param {object} group object
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object} created group json object
+         * @link http://api.beepsend.com/docs.html#contacts-groups-update
+         */
+        contactsGroupUpdate: function(groupId, group, success, error)
+        {
+            this.api.resource('/contacts/groups/'+groupId, "PUT", group, success, error);
+        },
+        
+        contactsGroupDelete: function(groupId, success, error)
+        {
+            
+        },
 
         getUserWallets: function(success, error)
         {
