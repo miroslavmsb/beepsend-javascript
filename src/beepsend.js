@@ -636,9 +636,17 @@ beepsend.prototype = (function() {
             this.api.resource('/contacts/groups/'+groupId, "PUT", group, success, error);
         },
         
+        /**
+         * Delete contacts group
+         * @param {int} groupId - id of contacts group that we want to delete
+         * @param {object} group object
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {http status} 204 no content http status
+         */
         contactsGroupDelete: function(groupId, success, error)
         {
-            
+            this.api.resource('/contacts/groups/'+groupId, "DELETE", {}, success, error);
         },
 
         getUserWallets: function(success, error)
