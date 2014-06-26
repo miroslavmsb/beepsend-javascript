@@ -608,6 +608,19 @@ beepsend.prototype = (function() {
             var path = (groupId != null) ? '/contacts/groups/'+groupId : '/contacts/groups/';
             this.api.resource(path, "GET", params, success, error);
         },
+        
+        /**
+         * Add contact group
+         * @param {object} group object
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object} created group json object
+         * @link http://api.beepsend.com/docs.html#contacts-groups-add
+         */
+        contactsGroupCreateNew: function(group, success, error)
+        {
+            this.api.resource('/contacts/groups/', "POST", group, success, error);
+        },
 
         getUserWallets: function(success, error)
         {
