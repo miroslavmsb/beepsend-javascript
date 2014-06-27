@@ -639,7 +639,6 @@ beepsend.prototype = (function() {
         /**
          * Delete contacts group
          * @param {int} groupId - id of contacts group that we want to delete
-         * @param {object} group object
          * @param {function} success - callback function for handling success response
          * @param {function} error - callback function for handling error
          * @returns {http status} 204 no content http status
@@ -647,6 +646,19 @@ beepsend.prototype = (function() {
         contactsGroupDelete: function(groupId, success, error)
         {
             this.api.resource('/contacts/groups/'+groupId, "DELETE", {}, success, error);
+        },
+        
+        /**
+         * Upload contacts to group
+         * @param {int} groupId - id of group that we want to update with csv file
+         * @param {string} file - this is raw file content
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object} json object with errors if exists or with errors: null
+         */
+        contactsGroupUploadCSV: function(groupId, file, success, error)
+        {
+            this.api.resourceRaw('/contacts/groups/'+groupId+'/upload/', "POST", file, success, error);
         },
 
         getUserWallets: function(success, error)
@@ -710,6 +722,28 @@ beepsend.api.prototype = {
             dataType: 'json',
             async: true,
             data: data,
+            success: callback,
+            error: error
+        });
+    },
+    
+    resourceRaw: function(resource, type, data, callback, error) {
+        /* Set default handler functions */
+        callback = callback || this.successCallback;
+        error = error || this.errorCallback;
+        
+        /* Generate full url for api call */
+        var fullResourceUrl = this.buildRequestUrl(resource);
+        
+        /* Execute ajax call */
+        $.ajax({
+            type: type,
+            url: fullResourceUrl,
+            crossDomain: true,
+            dataType: 'json',
+            async: true,
+            data: {"raw" : data},
+//            processData: false,
             success: callback,
             error: error
         });
