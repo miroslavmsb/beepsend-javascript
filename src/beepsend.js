@@ -11,7 +11,7 @@ var beepsend = function(params) {
         'api_token' : '',
         'api_hlr_token': '',
         'api_url' : 'api.beepsend.com',
-        'api_protocol' : 'http://',
+        'api_protocol' : 'https://',
         'api_port' : '80',
         'api_version' : '2',
     };
@@ -214,7 +214,7 @@ beepsend.prototype = (function() {
         
         /**
          * Update User email address
-         * @param {type} data - { "email" : "you@domain.com", "password" : "your_password" }
+         * @param {json} data - { "email" : "you@domain.com", "password" : "your_password" }
          * @param {function} success - callback function for handling success response
          * @param {function} error - callback function for handling error
          * @returns {status} 204 - No Content
@@ -227,7 +227,7 @@ beepsend.prototype = (function() {
         
         /**
          * Update User password
-         * @param {type} data - { "passoword" : "oldpassword", "new_password" : "newpassword" }
+         * @param {json} data - { "password" : "oldpassword", "new_password" : "newpassword" }
          * @param {function} success - callback function for handling success response
          * @param {function} error - callback function for handling error
          * @returns {status} 204 - No Content
@@ -659,6 +659,18 @@ beepsend.prototype = (function() {
         contactsGroupUploadCSV: function(groupId, file, success, error)
         {
             this.api.resourceRaw('/contacts/groups/'+groupId+'/upload/', "POST", file, success, error);
+        },
+        
+        /**
+         * Search contacts
+         * @param {json} query - object with query params
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {collection} collection of contacts objects
+         */
+        searchContacts: function(query, success, error)
+        {
+            this.api.resource('/search/contacts/', "GET", query, success, error);
         },
 
         getUserWallets: function(success, error)
