@@ -686,6 +686,11 @@ beepsend.prototype = (function() {
         analytic: function()
         {
             return new beepsend.analytic(this);
+        },
+        
+        contact: function()
+        {
+            return new beepsend.contact(this);
         }
         
     };
@@ -1020,6 +1025,197 @@ beepsend.connection.prototype = {
     {
         connection = connection || "me";
         this.api.resource(this.actions.connection+connection+this.actions.passwordreset, "GET", {}, success, error);
+    }
+    
+};
+
+beepsend.contact = function(bs)
+{
+    this.parameters = bs.parameters;
+    this.api = bs.api;
+    
+    this.actions = {
+        'contacts' : '/contacts/',
+        'groups' : '/contacts/groups/',
+        'upload' : '/upload/'
+    };
+    
+};
+
+beepsend.contact.prototype = {
+    
+    /**
+     * Get all contact belonging to your user
+     * @param {string} group - group id or name
+     * @param {type} sort - Sorting of the collection. Available keys are: name, id. Can be prepended with + or - to change the sorting direction (+ ASC, - DESC).
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {collection} collection of contacts objects
+     */
+    all: function(group, sort, success, error)
+    {
+        group = group || null;
+        sort = sort || null;
+        
+        var data = {};
+        
+        if(group !== null) {
+            data.group = group;
+        }
+        
+        if(sort !== null) {
+            data.sort = sort;
+        }
+        
+        this.api.resource(this.actions.contacts, "GET", data, success, error);
+        
+    },
+    
+    /**
+     * Create new contact
+     * @param {string} msisdn
+     * @param {string} firstName
+     * @param {string} lastName
+     * @param {string} groupId
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object} created contact object
+     */
+    add: function(msisdn, firstName, lastName, groupId, success, error)
+    {
+        firstName = firstName || null;
+        lastName = lastName || null;
+        groupId = groupId || null;
+        
+        var data = {
+            'msisdn' : msisdn
+        };
+        
+        if(firstName !== null) {
+            data.firstname = firstName;
+        }
+        
+        if(lastName !== null) {
+            data.lastname = lastName;
+        }
+        
+        if(groupId !== null) {
+            data.group_id = groupId;
+        }
+        
+        this.api.resource(this.actions.contacts, "POST", data, success, error);
+        
+    },
+    
+    /**
+     * Update existing contact
+     * @param {string} contactId - id of contact that we want to update
+     * @param {object} options - Available keys: msisdn, firstname, lastname, group_id
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object} updated contact object
+     */
+    update: function(contactId, options, success, error)
+    {
+        this.api.resource(this.actions.contacts+contactId, "PUT", options, success, error);
+    },
+    
+    /**
+     * Delete contact
+     * @param {string} contactId - id of contact that we want to delete
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    delete: function(contactId, success, error)
+    {
+        this.api.resource(this.actions.contacts+contactId, "DELETE", {}, success, error);
+    },
+    
+    /**
+     * Get all contact groups belonging to your user
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {collection} collection of contact groups objects
+     */
+    groups: function(success, error)
+    {
+        this.api.resource(this.actions.groups, "GET", {}, success, error);
+    },
+    
+    /**
+     * Get content of specific group
+     * @param {string} groupId - id of group that we want to get
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {undefined}
+     */
+    group: function(groupId, success, error)
+    {
+        this.api.resource(this.actions.groups+groupId, "GET", {}, success, error);
+    },
+    
+    /**
+     * Create new contacts group
+     * @param {string} groupName - name of group that we want to create
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object} object of created contact group
+     */
+    addGroup: function(groupName, success, error)
+    {
+        var data = {
+            "name" : groupName
+        };
+        this.api.resource(this.actions.groups, "POST", data, success, error);
+    },
+    
+    /**
+     * Update contact group
+     * @param {int} groupId - id of group that we want to update
+     * @param {string} groupName - new name for group
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object} object of updated contacts group
+     */
+    updateGroup: function(groupId, groupName, success, error)
+    {
+        var data = {
+            "name" : groupName
+        };
+        this.api.resource(this.actions.groups+groupId, "PUT", data, success, error);
+    },
+    
+    /**
+     * Delete contact group
+     * @param {int} groupId - id of group that we want to delete
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    deleteGroup: function(groupId, success, error) 
+    {
+        this.api.resource(this.actions.groups+groupId, "DELETE", {}, success, error);
+    },
+    
+    /**
+     * Import contacts to group from .csv file
+     * @param {string} file - html5 file object
+     * @param {int} groupId - id of group that we want import contacts from csv
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     * @todo need to check this function, when we get CORS for POST and PUT request enabled on API
+     */
+    upload: function(file, groupId, success, error)
+    {
+        var that = this;
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(event) {
+           var fileContent = event.target.result;
+           that.api.resourceRaw(that.actions.groups+groupId+that.actions.upload, "POST", fileContent, success, error);
+        };
     }
     
 };
