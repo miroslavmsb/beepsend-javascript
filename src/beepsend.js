@@ -422,272 +422,33 @@ beepsend.prototype = (function() {
             hlrApi.resource('/hlr/validate/', 'POST', {}, success, error);
         },
         
-        /**
-         * Get all batches
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} json response object with all batches
-         * @link http://api.beepsend.com/docs.html#batches
-         */
-        batchesGetAll: function(success, error)
-        {
-            this.api.resource('/batches', "GET", {}, success, error);
-        },
-        
-        /**
-         * Get specific batch
-         * @param {type} batchId - id of batch that we want to get
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} response json with specific batch
-         * @link http://api.beepsend.com/docs.html#batches
-         */
-        batchesGetById: function(batchId, success, error)
-        {
-            this.api.resource('/batches/'+batchId, "GET", {}, success, error);
-        },
-        
-        /**
-         * Accumulated statistic
-         * @param {object} params - search criteria params  
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} collection of json objects with statistics for all user accounts
-         * @link http://api.beepsend.com/docs.html#analytics-summary
-         */
-        accumulatedStatisticForMe: function(params, success, error)
-        {
-            params = params || {};
-            this.api.resource('/analytics/summary/', "GET", params, success, error);
-        },
-        
-        /**
-         * Network details analytics
-         * @param {object} query - json object with for specifing criteria
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} collection of json objects
-         * @link http://api.beepsend.com/docs.html#analytics-network
-         */
-        networkDetails: function(query, success, error)
-        {
-            query = query || {};
-            this.api.resource('/analytics/network/', "GET", query, success, error);
-        },       
-        
-        /**
-         * Batch analytics
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} collection of json objects with batch details
-         * @link http://api.beepsend.com/docs.html#analytics-batch
-         */
-        batchAnalytics: function(success, error)
-        {
-            this.api.resource('/analytics/batches/', "GET", {}, success, error);
-        },
-        
-        /**
-         * Batch analytics for specific batch
-         * @param {int} batchId - id of batch that we want to fetch details
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} collection of json objects with batch details
-         * @link http://api.beepsend.com/docs.html#analytics-batch
-         */
-        batchAnalyticsById: function(batchId, success, error)
-        {
-            this.api.resource('/analytics/batches/'+batchId, "GET", {}, success, error);
-        },
-        
-        /**
-         * Get all contacts
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} collection with all contact json objects
-         * @link http://api.beepsend.com/docs.html#contacts
-         */
-        contactsGetAll: function(query, success, error)
-        {
-            query = query || {};
-            this.api.resource('/contacts/', "GET", query, success, error);
-        },
-        
-        /**
-         * Get single contact object
-         * @param {int} contactId - id of contact that we want to find
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} contact json object
-         * @link http://api.beepsend.com/docs.html#contacts
-         */
-        contactsGet: function(contactId, success, error)
-        {
-            this.api.resource('/contacts/'+contactId, "GET", {}, success, error);
-        },
-        
-        /**
-         * Add new contact
-         * @param {object} data - json object with all contact data
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} created contact object
-         * @link http://api.beepsend.com/docs.html#contacts-add
-         */
-        contactsAddNew: function(data, success, error)
-        {
-            this.api.resource('/contacts/', "POST", data, success, error);
-        },
-        
-        /**
-         * Update existing contact
-         * @param {int} contactId - id of contact that we want to update
-         * @param {object} data - updated contact object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} updated contact object
-         * @link http://api.beepsend.com/docs.html#contacts-update
-         */
-        contactsUpdate: function(contactId, data, success, error)
-        {
-            data = data || {};
-            this.api.resource('/contacts/'+contactId, "PUT", data, success, error);
-        },
-        
-        /**
-         * Delete contact
-         * @param {int} contactId - id of contact that we want to delete
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {http header} returns http 204 no content header
-         * @link http://api.beepsend.com/docs.html#contacts-delete
-         */        
-        contactsDelete: function(contactId, success, error)
-        {
-            this.api.resource('/contacts/'+contactId, "DELETE", {}, success, error);
-        },
-        
-        /**
-         * Get all contacts groups for authorized connection
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} collection of contact groups objects
-         * @link http://api.beepsend.com/docs.html#contacts-groups
-         */
-        contactsGroupGetAll: function(success, error)
-        {
-            this.api.resource('/contacts/groups/', "GET", {}, success, error);
-        },
-        
-        /**
-         * Get single contact group for specified group id
-         * @param {int} groupId - id of group that we want to fetch from api
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} json object of contact group
-         * @link http://api.beepsend.com/docs.html#contacts-groups
-         */
-        contactsGroupGetById: function(groupId, success, error)
-        {
-            this.api.resource('/contacts/groups/'+groupId, "GET", {}, success, error);
-        },
-        
-        /**
-         * Get contacts groups by specified criteria
-         * @param {type} groupId - id of group that we want to fetch, if we dont want to specify group we just pass null for this param 
-         * @param {type} params - params for search criteria, this is also optional if you dont want to skip it just pass {} to function
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} json groups object
-         * @link http://api.beepsend.com/docs.html#contacts-groups
-         */
-        contactsGroupGetByCriteria: function(groupId, params, success, error)
-        {
-            groupId = groupId || null;
-            params = params || {};
-            var path = (groupId != null) ? '/contacts/groups/'+groupId : '/contacts/groups/';
-            this.api.resource(path, "GET", params, success, error);
-        },
-        
-        /**
-         * Add contact group
-         * @param {object} group object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} created group json object
-         * @link http://api.beepsend.com/docs.html#contacts-groups-add
-         */
-        contactsGroupCreateNew: function(group, success, error)
-        {
-            this.api.resource('/contacts/groups/', "POST", group, success, error);
-        },
-        
-        /**
-         * Update contacts group
-         * @param {int} groupId - id of contacts group that we want to update
-         * @param {object} group object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} created group json object
-         * @link http://api.beepsend.com/docs.html#contacts-groups-update
-         */
-        contactsGroupUpdate: function(groupId, group, success, error)
-        {
-            this.api.resource('/contacts/groups/'+groupId, "PUT", group, success, error);
-        },
-        
-        /**
-         * Delete contacts group
-         * @param {int} groupId - id of contacts group that we want to delete
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {http status} 204 no content http status
-         */
-        contactsGroupDelete: function(groupId, success, error)
-        {
-            this.api.resource('/contacts/groups/'+groupId, "DELETE", {}, success, error);
-        },
-        
-        /**
-         * Upload contacts to group
-         * @param {int} groupId - id of group that we want to update with csv file
-         * @param {string} file - this is raw file content
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} json object with errors if exists or with errors: null
-         */
-        contactsGroupUploadCSV: function(groupId, file, success, error)
-        {
-            this.api.resourceRaw('/contacts/groups/'+groupId+'/upload/', "POST", file, success, error);
-        },
-        
-        /**
-         * Search contacts
-         * @param {json} query - object with query params
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {collection} collection of contacts objects
-         */
-        searchContacts: function(query, success, error)
-        {
-            this.api.resource('/search/contacts/', "GET", query, success, error);
-        },
-
         getUserWallets: function(success, error)
         {
             this.api.resource('/wallets/', "GET", {}, success, error);
         },
         
+        /**
+         * Get user resource
+         * @returns {beepsend.user}
+         */
         user: function()
         {
             return new beepsend.user(this);
         },
         
+        /**
+         * Get analytic resource
+         * @returns {beepsend.analytic}
+         */
         analytic: function()
         {
             return new beepsend.analytic(this);
         },
         
+        /**
+         * Get contact resource
+         * @returns {beepsend.contact}
+         */
         contact: function()
         {
             return new beepsend.contact(this);
