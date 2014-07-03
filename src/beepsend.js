@@ -55,379 +55,6 @@ beepsend.prototype = (function() {
         },
         
         /**
-         * Customer call
-         * @link http://api.beepsend.com/docs.html#customer
-         */
-        customer: function(success, error) {
-            this.api.resource('/customer/', 'GET', {}, success, error);
-        },
-        
-        /**
-         * Receive the connection object for given API-token. 
-         * @param {function} success
-         * @param {function} error
-         * @returns {object} connection object for given API-token
-         * @link http://api.beepsend.com/docs.html#connection
-         */
-        getUserConnections: function(success, error) 
-        {
-            this.api.resource('/connections/me', "GET", {}, success, error);
-        },
-        
-        /**
-         * Returns all connection for given API-token. 
-         * @param {function} success
-         * @param {function} error
-         * @returns {object} connection objects for given API-token
-         * @link http://api.beepsend.com/docs.html#connection
-         */
-        getConnections: function(success, error) 
-        {
-            this.api.resource('/connections/', "GET", {}, success, error);
-        },
-        
-        /**
-         * Update connection by connection id
-         * @param {int} connectionId - id of connection that we want to update
-         * @param {object} data - connection data that we want to update
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} connection object of connection that we updated
-         * @link http://api.beepsend.com/docs.html#connection-update
-         */
-        updateConnection: function(connectionId, data, success, error)
-        {
-            this.api.resource('/connections/'+connectionId, "PUT", data, success, error);
-        },
-        
-        /**
-         * Update connection for api_key
-         * @param {int} connectionId - id of connection that we want to update
-         * @param {object} data - connection data that we want to update
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} connection object of connection that we updated
-         * @link http://api.beepsend.com/docs.html#connection-update
-         */
-        updateMyConnection: function(data, success, error)
-        {
-            this.api.resource('/connections/me', "PUT", data, success, error);
-        },
-        
-        /**
-         * Reset api_token for provided connectionId
-         * @param {int} connectionId - id of connection that we want to reset api token
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} - object with new api_token
-         * @link http://api.beepsend.com/docs.html#connection-tokenreset
-         */
-        resetConnectionToken: function(connectionId, success, error)
-        {
-            this.api.resource('/connections/'+connectionId+'/tokenreset', "GET", {}, success, error);
-        },
-        /**
-         * Reset connection password for provided connectionId
-         * @param {int} connectionId - id of connection that we want to reset api token
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} - object with new api_token
-         * @link http://api.beepsend.com/docs.html#connection-passwordreset
-         */
-        resetConnectionPassword: function(connectionId, success, error)
-        {
-            this.api.resource('/connections/'+connectionId+'/passwordreset', "GET", {}, success, error);
-        },
-        
-        /**
-         * Connection Price Lists
-         * @param {int} connectionId - set value of this param null if you want to get pricelist for current connection, or you can pass connectionId
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} connection current pricelist
-         * @link http://api.beepsend.com/docs.html#pricelist
-         */
-        getConnectionCurrentPricelist: function(connectionId, success, error) 
-        {
-            if(connectionId == null) {
-                this.api.resource('/connections/me/pricelists/current', 'GET', {}, success, error);
-            }
-            else {
-                this.api.resource('/connections/'+connectionId+'/pricelists/current', "GET", {}, success, error);
-            }
-        },
-        
-        /**
-         * Get CSV pricelist for provided connection_id
-         * @param {int} connectionId
-         * @param {object} data - data object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {csv} csv output
-         * @link http://api.beepsend.com/docs.html#pricelists
-         */
-        getConnectionPricelistCSVByConnectionId: function(connectionId, data, success, error)
-        {
-            data = data || {};
-            this.api.resource('/pricelists/'+connectionId+'.csv', "GET", data, success, error);
-        },
-        
-        /**
-         * Get CSV pricelist for provided connection_label
-         * @param {int} connectionLabel
-         * @param {object} data - data object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {csv} csv output
-         * @link http://api.beepsend.com/docs.html#pricelists
-         */
-        getConnectionPricelistCSVByConnectionLabel: function(connectionLabel, data, success, error)
-        {
-            data = data || {};
-            this.api.resource('/pricelists/'+connectionLabel+'.csv', "GET", data, success, error);
-        },
-        
-        /**
-         * Get details regarding your user
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} json response user object
-         * @link http://api.beepsend.com/docs.html#users
-         */
-        getUser: function(success, error) 
-        {
-            this.api.resource('/users/me', "GET", {}, success, error);
-        },
-        
-        /**
-         * Update user
-         * @param {object} data - that we want to update
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} json response user object
-         * @link http://api.beepsend.com/docs.html#user-update
-         */
-        updateUser: function(data, success, error)
-        {
-            this.api.resource('/users/me', "PUT", data, success, error);
-        },
-        
-        /**
-         * Update User email address
-         * @param {json} data - { "email" : "you@domain.com", "password" : "your_password" }
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {status} 204 - No Content
-         * @link http://api.beepsend.com/docs.html#user-update-email
-         */
-        updateUserEmail: function(data, success, error)
-        {
-            this.api.resource('/users/me/email', "PUT", data, success, error);
-        },
-        
-        /**
-         * Update User password
-         * @param {json} data - { "password" : "oldpassword", "new_password" : "newpassword" }
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {status} 204 - No Content
-         * @link http://api.beepsend.com/docs.html#user-update-password
-         */
-        updateUserPassword: function(data, success, error)
-        {
-            this.api.resource('/users/me/password', "PUT", data, success, error);
-        },
-        
-        /**
-         * Reset User password
-         * @param {string} email - for sending password reset request
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {status} 204 - No Content
-         * @link http://api.beepsend.com/docs.html#user-passwordreset
-         */
-        resetUserPassword: function(email, success, error)
-        {
-            this.api.resource('/users/passwordreset?email='+email, "GET", {}, success, error);
-        },
-        
-        /**
-         * Reset User Token
-         * @param {type} id - of user that we want to reset token
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} json - with new generated api_token
-         * @link http://api.beepsend.com/docs.html#user-tokenreset
-         */
-        resetUserToken: function(id, success, error) 
-        {   
-            if(id != null) {
-                this.api.resource('/users/'+id+'/tokenreset', "GET", {}, success, error);
-            }
-            else {
-                this.api.resource('/users/me/tokenreset', "GET", {}, success, error);
-            }
-        },
-        
-        /**
-         * Send sms message
-         * @param {object} message object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {obejct} status - message status or error
-         * @link http://api.beepsend.com/docs.html#send-sms
-         * @see for sending binary messages you need to specify message type, please read documentation on next link
-         * @link http://api.beepsend.com/docs.html#send-sms-binary
-         */
-        sendSMS: function(message, success, error) 
-        {
-            var msgDef = {};
-            var msg = extend(msgDef, message);
-            this.api.resource('/sms/', 'POST', msg, success, error);
-        },
-        
-        /**
-         * Specify which connection to use for sending this message. 
-         * This can be useful if you are authenticating with a User token and do not want to send with your default connection.
-         * @param {type} connectionId - connection id for connection that we want to use for sending sms message
-         * @param {object} message object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {obejct} status - message status or error
-         * @link http://api.beepsend.com/docs.html#send-sms
-         * @see for sending binary messages you need to specify message type, please read documentation on next link
-         * @link http://api.beepsend.com/docs.html#send-sms-binary
-         */
-        sendSMSWithConnectionId: function(connectionId, message, success, error)
-        {
-            var msgDef = {};
-            var msg = extend(msgDef, message);
-            this.api.resource('/sms/'+connectionId, "POST", msg, success, error);
-        },
-        
-        /**
-         * Specify which connection to use for sending this message. 
-         * This can be useful if you are authenticating with a User token and do not want to send with your default connection.
-         * @param {type} connectionLabel - connectionLabel for connection that we want to use for sending sms message
-         * @param {object} message object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {obejct} status - message status or error
-         * @link http://api.beepsend.com/docs.html#send-sms
-         * @see for sending binary messages you need to specify message type, please read documentation on next link
-         * @link http://api.beepsend.com/docs.html#send-sms-binary 
-         */
-        sendSMSWithConnectionLabel: function(connectionLabel, message, success, error)
-        {
-            var msgDef = {};
-            var msg = extend(msgDef, message);
-            this.api.resource('sms'+connectionLabel, "POST", msg, success, error);
-        },
-        
-        /**
-         * Sending to imported groups of numbers
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} status for sended messages
-         * @link http://api.beepsend.com/docs.html#send-sms-groups
-         */
-        sendGroupSMS: function(data, success, error) 
-        {
-            this.api.resource('/batches/', "POST", data, success, error);
-        },
-        
-        /**
-         * SMS Lookup
-         * @param {int} smsId - id of sms that we want to find
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} response object with all details about sms
-         * @link http://api.beepsend.com/docs.html#sms-lookup-multiple
-         */
-        findSMSById: function(smsId, success, error)
-        {
-            this.api.resource('/sms/'+smsId, "GET", {}, success, error);
-        },
-        
-        /**
-         * Multiple messages
-         * Get details regarding multiple sent messages with filters.
-         * @param {type} params - params for search criteria
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} collection object with multiple messages
-         * @link http://api.beepsend.com/docs.html#sms-lookup-multiple
-         */
-        findMultipleMessages: function(params, success, error)
-        {
-            this.api.resource('/sms/', "GET", params, success, error);
-        },
-        
-        /**
-         * HLR
-         * @param {string} phoneNum
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} hlr response
-         * @link http://api.beepsend.com/docs.html#hlr
-         */
-        hrl: function(phoneNum, success, error)
-        {
-            var hlrApi = new beepsend.api(this.parameters, true);
-            hlrApi.resource('/hlr/'+phoneNum, "GET", {}, success, error);
-        },
-        
-        /**
-         * Bulk HLR
-         * @param {string} phoneNumbers, collection of phone numbers {"msisdn" : ["46736007518", "46736007505", "046736007512"]}
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} hlr response
-         * @link http://api.beepsend.com/docs.html#hlr-bulk
-         * @todo - we need to find solution how to solve callback url in javascript sdk.
-         * @description this action requires callback url for receiving bulk hlr response
-         */
-        hlrBulk: function(phoneNumbers, success, error)
-        {
-            var hlrApi = new beepsend.api(this.parameters, true);
-            hlrApi.resource('/hlr/', "GET", phoneNumbers, success, error);
-        },
-        
-        /**
-         * Validate sms
-         * @param {object} message object
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} validation object with errors if exists
-         * @link http://api.beepsend.com/docs.html#validation-sms
-         */
-        validateSMS: function(message, success, error) 
-        {
-            var msgDef = {};
-            var msg = extend(msgDef, message);
-            this.api.resource('/sms/validate/', 'POST', msg, success, error);
-        },
-        
-        /**
-         * HLR validation
-         * @param {string} phoneNum - phone number
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
-         * @returns {object} hlr validation response
-         * @link http://api.beepsend.com/docs.html#validation-hlr
-         */
-        validateHLR: function(phoneNum, success, error)
-        {
-            var hlrApi = new beepsend.api(this.parameters, true);
-            hlrApi.resource('/hlr/validate/', 'POST', {}, success, error);
-        },
-        
-        getUserWallets: function(success, error)
-        {
-            this.api.resource('/wallets/', "GET", {}, success, error);
-        },
-        
-        /**
          * Get user resource
          * @returns {beepsend.user}
          */
@@ -452,6 +79,26 @@ beepsend.prototype = (function() {
         contact: function()
         {
             return new beepsend.contact(this);
+        },
+        
+        customer: function()
+        {
+            return new beepsend.customer(this);
+        },
+        
+        connection: function()
+        {
+            return new beepsend.connection(this);
+        },
+        
+        hlr: function()
+        {
+            return new beepsend.hlr(this);
+        },
+        
+        message: function()
+        {
+            return new beepsend.message(this);
         }
         
     };
@@ -981,6 +628,284 @@ beepsend.contact.prototype = {
     
 };
 
+beepsend.customer = function(bs)
+{
+    this.parameters = bs.parameters;
+    this.api = bs.api;
+    
+    this.actions = {
+        'data' : '/customer/'
+    };
+}
+
+beepsend.customer.prototype = {
+    
+    /**
+     * Get customer informations
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    data: function(success, error)
+    {
+        this.api.resource(this.actions.data, "GET", {}, success, error);
+    }
+    
+};
+
+beepsend.hlr = function(bs)
+{
+    this.parameters = bs.parameters;
+    this.api = bs.api;
+    
+    this.actions = {
+        'hlr' : '/hlr/',
+        'validate' : '/hlr/validate'
+    };
+};
+
+beepsend.hlr.prototype = {
+    
+    /**
+     * Intermediate HLR call
+     * @param {int} msisdn - that we are looking HLR request
+     * @param {string} connection - connection id of HLR connection
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    intermediate: function(msisdn, connection, success, error)
+    {
+        connection = connection || "me";
+        this.api.resource(this.actions.hlr+msisdn, "GET", {"connection" : connection}, success, error);
+    },
+    
+    /**
+     * Bulk HLR request
+     * @param {type} msisdns - array of msisdns ["12212123", "123125344"]
+     * @param {type} connection - connection id of HLR connection
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     * @description This method requires callback url on application to deliver hlr result response
+     */
+    bulk: function(msisdns, connection, success, error)
+    {
+        var data = {
+            "msisdn" : msisdns,
+            "connection" : (connection) ? connection : "me"
+        };
+        this.api.resource(this.actions.hlr, "POST", data, success, error);
+    },
+    
+    /**
+     * Validate HLR request
+     * @param {int} msisdn - that we are looking HLR request
+     * @param {string} connection - connection id of HLR connection
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    validate: function(msisdn, connection, success, error)
+    {
+        connection = connection || "me";
+        var data = {
+            "msisdn" : msisdn,
+            "connection" : (connection) ? connection : "me"
+        };
+        this.api.resource(this.actions.validate, "POST", data, success, error);
+    }
+    
+};
+
+beepsend.message = function(bs)
+{
+    this.parameters = bs.parameters;
+    this.api = bs.api;
+    
+    this.actions = {
+        'sms' : '/sms/',
+        'validate' : '/sms/validate/',
+        'batches' : '/batches/',
+        'estimation' : 'costestimate/'
+    };
+};
+
+beepsend.message.prototype = {
+    
+        /**
+         * Send SMS message
+         * @param {int|string} from - phone number we are sending from or text 
+         * @param {int|array} to - Number of recipient or array with recipient numbers
+         * @param {string} message - text message
+         * @param {string} connection - Connection id to use for sending sms
+         * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
+         * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */        
+        send: function(from, to, message, connection, encoding, options, success, error)
+        {
+            connection = connection || "";
+            encoding = encoding || "UTF-8";
+            var data = {
+                'from' : from,
+                'to' : to,
+                'message' : message,
+                'encoding' : encoding,
+                'receive_dlr' : 0
+            };
+            
+            /* extend data object with aditional options for sending sms */
+            data = beepsend.extend(data, options);
+            
+            this.api.resource(this.actions.sms+connection, "POST", data, success, error);
+        },
+        
+        /**
+         * Send SMS to group of contacts
+         * @param {int|string} from - phone number we are sending from or text 
+         * @param {int|array} groups - id of group or array with groups ids
+         * @param {string} message - text message
+         * @param {string|int} connection - Connection id to use for sending sms
+         * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
+         * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */
+        groupSending: function(from, groups, message, connection, encoding, options, success, error)
+        {
+            connection = connection || "";
+            encoding = encoding || "UTF-8";
+            var data = {
+                'from' : from,
+                'groups' : groups,
+                'message' : message,
+                'encoding' : encoding,
+                'receive_dlr' : 0
+            };
+            
+            /* extend data object with adtitional options for sending group sms */
+            data = beepsend.extend(data, options);
+            
+            this.api.resource(this.actions.batches+connection, "POST", data, success, error);
+        },
+        
+        /**
+         * Get message details of sent messages through Beepsend
+         * @param {int} messageId - id of message
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */
+        lookup: function(messageId, success, error)
+        {
+            this.api.resource(this.actions.sms+messageId, "GET", {}, success, error);
+        },
+        
+        /**
+         * Get messages details of sent messages through Beepsend
+         * @param {object} options - options to fetch messages. More info on: http://api.beepsend.com/docs.html#sms-lookup-multiple
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */
+        multipleLookup: function(options, success, error)
+        {
+            options = options || {};
+            this.api.resource(this.actions.sms, "GET", options, success, error);
+        },
+        
+        /**
+         * Validate SMS
+         * @param {int|string} from - phone number we are sending from or text 
+         * @param {int|array} to - Number of recipient or array with recipient numbers
+         * @param {string} message - text message
+         * @param {string} connection - Connection id to use for sending sms
+         * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
+         * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */
+        validate: function(from, to, message, connection, encoding, options, success, error)
+        {
+            connection = connection || "";
+            encoding = encoding || "UTF-8";
+            var data = {
+                'from' : from,
+                'to' : to,
+                'message' : message,
+                'encoding' : encoding,
+                'receive_dlr' : 0
+            };
+            
+            /* extend data object with adtitional options for validating sms */
+            data = beepsend.extend(data, options);
+            
+            this.api.resource(this.actions.validate+connection, "POST", data, success, error);
+        },
+        
+        /**
+         * Get previous batches
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */
+        batches: function(success, error)
+        {
+            this.api.resource(this.actions.batches, "GET", {}, success, error);
+        },
+        
+        /**
+         * Estimate SMS cost
+         * @param {int|array} to - Number of recipient or array with recipient numbers
+         * @param {string} message - text message
+         * @param {string} connection - Connection id to use for sending sms
+         * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */
+        estimateCost: function(to, message, connection, encoding, success, error)
+        {
+            connection = connection || "";
+            encoding = encoding || "UTF-8";
+            var data = {
+                'to' : to,
+                'message' : message,
+                'encoding' : encoding
+            };
+            this.api.resource(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
+        },
+        
+        estimateCostGroup: function(groups, message, connection, encoding, success, error)
+        {
+            connection = connection || "";
+            encoding = encoding || "UTF-8";
+            var data = {
+                'groups' : groups,
+                'message' : message,
+                'encoding' : encoding
+            };
+            
+            this.api.resource(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
+        }
+        
+};
+
+beepsend.extend = function(def, params)
+{
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            def[key] = params[key];
+        }
+    }
+    return def;
+}
+
 /**
  * Beepsend api communication class
  * @param {object} params - configuration object
@@ -1068,6 +993,7 @@ beepsend.api.prototype = {
         }
         
     },
+    
     resourceJquery: function(resource, type, data, callback, error) {
         /* Set default handler functions */
         callback = callback || this.successCallback;
