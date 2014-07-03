@@ -109,6 +109,11 @@ beepsend.prototype = (function() {
         search: function()
         {
             return new beepsend.search(this);
+        },
+        
+        wallet: function()
+        {
+            return new beepsend.wallet(this);
         }
         
     };
@@ -143,7 +148,7 @@ beepsend.user.prototype = {
      */
     data: function(success, error)
     {
-        this.api.resource(this.actions.users+this.user, "GET", {}, success, error);
+        this.api.execute(this.actions.users+this.user, "GET", {}, success, error);
     },
     
     /**
@@ -156,7 +161,7 @@ beepsend.user.prototype = {
      */
     update: function(options, success, error)
     {
-        this.api.resource(this.actions.users+this.user, "PUT", options, success, error);
+        this.api.execute(this.actions.users+this.user, "PUT", options, success, error);
     },
     
     /**
@@ -173,7 +178,7 @@ beepsend.user.prototype = {
             "email" : email,
             "password" : password
         };
-        this.api.resource(this.actions.users+this.user+'/'+this.actions.email, "PUT", data, success, error);
+        this.api.execute(this.actions.users+this.user+'/'+this.actions.email, "PUT", data, success, error);
     },
     
     /**
@@ -190,7 +195,7 @@ beepsend.user.prototype = {
             'password' : oldPassword,
             'new_password' : newPassword
         };
-        this.api.resource(this.actions.users+this.user+'/'+this.actions.password, "PUT", data, success, error);
+        this.api.execute(this.actions.users+this.user+'/'+this.actions.password, "PUT", data, success, error);
     },
     
     /**
@@ -205,7 +210,7 @@ beepsend.user.prototype = {
         var data = {
             "email" : email
         };
-        this.api.resource(this.actions.users+this.actions.passwordreset, "GET", data, success, error);
+        this.api.execute(this.actions.users+this.actions.passwordreset, "GET", data, success, error);
     },
     
     /**
@@ -221,7 +226,7 @@ beepsend.user.prototype = {
         var data = {
             'password' : password
         };
-        this.api.resource(this.actions.users+this.actions.password+'/'+hash, "PUT", data, success, error);
+        this.api.execute(this.actions.users+this.actions.password+'/'+hash, "PUT", data, success, error);
     },
     
     /**
@@ -236,7 +241,7 @@ beepsend.user.prototype = {
         var data = {
             'password' : password
         };
-        this.api.resource(this.actions.users+this.user+this.actions.tokenreset, "GET", data, success, error);
+        this.api.execute(this.actions.users+this.user+this.actions.tokenreset, "GET", data, success, error);
     },
     
     /**
@@ -248,7 +253,7 @@ beepsend.user.prototype = {
      */
     verifyEmail: function(hash, success, error)
     {
-        this.api.resource(this.actions.users+this.actions.email+'/'+hash, "GET", {}, success, error);
+        this.api.execute(this.actions.users+this.actions.email+'/'+hash, "GET", {}, success, error);
     },
     
     /**
@@ -260,7 +265,7 @@ beepsend.user.prototype = {
      */
     verifyPhone: function(hash, success, error)
     {
-        this.api.resource(this.actions.users+this.actions.phone+'/'+hash, "GET", {}, success, error);
+        this.api.execute(this.actions.users+this.actions.phone+'/'+hash, "GET", {}, success, error);
     }
     
 };
@@ -306,7 +311,7 @@ beepsend.analytic.prototype = {
             data.to_date = toDate;
         }
         
-        this.api.resource(this.actions.summary+connection, "GET", data, success, error);
+        this.api.execute(this.actions.summary+connection, "GET", data, success, error);
     },
     
     /**
@@ -346,7 +351,7 @@ beepsend.analytic.prototype = {
             data.MNC = MNC;
         }
         
-        this.api.resource(this.actions.network+connection, "GET", data, success, error);
+        this.api.execute(this.actions.network+connection, "GET", data, success, error);
         
     },
     
@@ -360,7 +365,7 @@ beepsend.analytic.prototype = {
     batch: function(batchId, success, error)
     {
         batchId = batchId || null;
-        this.api.resource(this.actions.batch+batchId, "GET", {}, success, error);
+        this.api.execute(this.actions.batch+batchId, "GET", {}, success, error);
     }
     
 };
@@ -388,7 +393,7 @@ beepsend.connection.prototype = {
      */
     all: function(success, error) 
     {
-        this.api.resource(this.actions.connections, "GET", {}, success, error);
+        this.api.execute(this.actions.connections, "GET", {}, success, error);
     },
     
     /**
@@ -401,7 +406,7 @@ beepsend.connection.prototype = {
     data: function(connection, success, error)
     {
         connection = connection || 'me';
-        this.api.resource(this.actions.connections+connection, "GET", {}, success, error);
+        this.api.execute(this.actions.connections+connection, "GET", {}, success, error);
     },
     
     /**
@@ -417,7 +422,7 @@ beepsend.connection.prototype = {
     update: function(connection, options, success, error)
     {
         connection = connection || 'me';
-        this.api.resource(this.actions.connections+connection, "PUT", options, success, error);
+        this.api.execute(this.actions.connections+connection, "PUT", options, success, error);
     },
     
     /**
@@ -429,7 +434,7 @@ beepsend.connection.prototype = {
      */
     resetToken: function(connection, success, error)
     {
-        this.api.resource(this.actions.connections+connection+this.actions.tokenreset, "GET", {}, success, error);
+        this.api.execute(this.actions.connections+connection+this.actions.tokenreset, "GET", {}, success, error);
     },
     
     /**
@@ -442,7 +447,7 @@ beepsend.connection.prototype = {
     resetPassword: function(connection, success, error)
     {
         connection = connection || "me";
-        this.api.resource(this.actions.connection+connection+this.actions.passwordreset, "GET", {}, success, error);
+        this.api.execute(this.actions.connection+connection+this.actions.passwordreset, "GET", {}, success, error);
     }
     
 };
@@ -485,7 +490,7 @@ beepsend.contact.prototype = {
             data.sort = sort;
         }
         
-        this.api.resource(this.actions.contacts, "GET", data, success, error);
+        this.api.execute(this.actions.contacts, "GET", data, success, error);
         
     },
     
@@ -521,7 +526,7 @@ beepsend.contact.prototype = {
             data.group_id = groupId;
         }
         
-        this.api.resource(this.actions.contacts, "POST", data, success, error);
+        this.api.execute(this.actions.contacts, "POST", data, success, error);
         
     },
     
@@ -535,7 +540,7 @@ beepsend.contact.prototype = {
      */
     update: function(contactId, options, success, error)
     {
-        this.api.resource(this.actions.contacts+contactId, "PUT", options, success, error);
+        this.api.execute(this.actions.contacts+contactId, "PUT", options, success, error);
     },
     
     /**
@@ -547,7 +552,7 @@ beepsend.contact.prototype = {
      */
     delete: function(contactId, success, error)
     {
-        this.api.resource(this.actions.contacts+contactId, "DELETE", {}, success, error);
+        this.api.execute(this.actions.contacts+contactId, "DELETE", {}, success, error);
     },
     
     /**
@@ -558,7 +563,7 @@ beepsend.contact.prototype = {
      */
     groups: function(success, error)
     {
-        this.api.resource(this.actions.groups, "GET", {}, success, error);
+        this.api.execute(this.actions.groups, "GET", {}, success, error);
     },
     
     /**
@@ -570,7 +575,7 @@ beepsend.contact.prototype = {
      */
     group: function(groupId, success, error)
     {
-        this.api.resource(this.actions.groups+groupId, "GET", {}, success, error);
+        this.api.execute(this.actions.groups+groupId, "GET", {}, success, error);
     },
     
     /**
@@ -585,7 +590,7 @@ beepsend.contact.prototype = {
         var data = {
             "name" : groupName
         };
-        this.api.resource(this.actions.groups, "POST", data, success, error);
+        this.api.execute(this.actions.groups, "POST", data, success, error);
     },
     
     /**
@@ -601,7 +606,7 @@ beepsend.contact.prototype = {
         var data = {
             "name" : groupName
         };
-        this.api.resource(this.actions.groups+groupId, "PUT", data, success, error);
+        this.api.execute(this.actions.groups+groupId, "PUT", data, success, error);
     },
     
     /**
@@ -613,7 +618,7 @@ beepsend.contact.prototype = {
      */
     deleteGroup: function(groupId, success, error) 
     {
-        this.api.resource(this.actions.groups+groupId, "DELETE", {}, success, error);
+        this.api.execute(this.actions.groups+groupId, "DELETE", {}, success, error);
     },
     
     /**
@@ -658,7 +663,7 @@ beepsend.customer.prototype = {
      */
     data: function(success, error)
     {
-        this.api.resource(this.actions.data, "GET", {}, success, error);
+        this.api.execute(this.actions.data, "GET", {}, success, error);
     }
     
 };
@@ -687,7 +692,7 @@ beepsend.hlr.prototype = {
     intermediate: function(msisdn, connection, success, error)
     {
         connection = connection || "me";
-        this.api.resource(this.actions.hlr+msisdn, "GET", {"connection" : connection}, success, error);
+        this.api.execute(this.actions.hlr+msisdn, "GET", {"connection" : connection}, success, error);
     },
     
     /**
@@ -705,7 +710,7 @@ beepsend.hlr.prototype = {
             "msisdn" : msisdns,
             "connection" : (connection) ? connection : "me"
         };
-        this.api.resource(this.actions.hlr, "POST", data, success, error);
+        this.api.execute(this.actions.hlr, "POST", data, success, error);
     },
     
     /**
@@ -723,7 +728,7 @@ beepsend.hlr.prototype = {
             "msisdn" : msisdn,
             "connection" : (connection) ? connection : "me"
         };
-        this.api.resource(this.actions.validate, "POST", data, success, error);
+        this.api.execute(this.actions.validate, "POST", data, success, error);
     }
     
 };
@@ -770,7 +775,7 @@ beepsend.message.prototype = {
             /* extend data object with aditional options for sending sms */
             data = beepsend.extend(data, options);
             
-            this.api.resource(this.actions.sms+connection, "POST", data, success, error);
+            this.api.execute(this.actions.sms+connection, "POST", data, success, error);
         },
         
         /**
@@ -800,7 +805,7 @@ beepsend.message.prototype = {
             /* extend data object with adtitional options for sending group sms */
             data = beepsend.extend(data, options);
             
-            this.api.resource(this.actions.batches+connection, "POST", data, success, error);
+            this.api.execute(this.actions.batches+connection, "POST", data, success, error);
         },
         
         /**
@@ -812,7 +817,7 @@ beepsend.message.prototype = {
          */
         lookup: function(messageId, success, error)
         {
-            this.api.resource(this.actions.sms+messageId, "GET", {}, success, error);
+            this.api.execute(this.actions.sms+messageId, "GET", {}, success, error);
         },
         
         /**
@@ -825,7 +830,7 @@ beepsend.message.prototype = {
         multipleLookup: function(options, success, error)
         {
             options = options || {};
-            this.api.resource(this.actions.sms, "GET", options, success, error);
+            this.api.execute(this.actions.sms, "GET", options, success, error);
         },
         
         /**
@@ -855,7 +860,7 @@ beepsend.message.prototype = {
             /* extend data object with adtitional options for validating sms */
             data = beepsend.extend(data, options);
             
-            this.api.resource(this.actions.validate+connection, "POST", data, success, error);
+            this.api.execute(this.actions.validate+connection, "POST", data, success, error);
         },
         
         /**
@@ -866,7 +871,7 @@ beepsend.message.prototype = {
          */
         batches: function(success, error)
         {
-            this.api.resource(this.actions.batches, "GET", {}, success, error);
+            this.api.execute(this.actions.batches, "GET", {}, success, error);
         },
         
         /**
@@ -888,7 +893,7 @@ beepsend.message.prototype = {
                 'message' : message,
                 'encoding' : encoding
             };
-            this.api.resource(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
+            this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
         },
         
         /**
@@ -911,7 +916,7 @@ beepsend.message.prototype = {
                 'encoding' : encoding
             };
             
-            this.api.resource(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
+            this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
         }
         
 };
@@ -940,7 +945,7 @@ beepsend.pricelist.prototype = {
     get: function(connection, success, error)
     {
         connection = connection || "me";
-        this.api.resource(this.actions.connections+connection+this.actions.pricelists, "GET", {}, success, error);
+        this.api.execute(this.actions.connections+connection+this.actions.pricelists, "GET", {}, success, error);
     },
     
     
@@ -981,7 +986,7 @@ beepsend.search.prototype = {
             data.group_id = groupId;
         }
         
-        this.api.resource(this.actions.contacts, "GET", data, success, error);
+        this.api.execute(this.actions.contacts, "GET", data, success, error);
     },
     
     /**
@@ -997,7 +1002,147 @@ beepsend.search.prototype = {
             'query' : query
         };
         
-        this.api.resource(this.actions.groups, "GET", data, success, error);
+        this.api.execute(this.actions.groups, "GET", data, success, error);
+    }
+    
+};
+
+beepsend.wallet = function(bs)
+{
+    this.parameters = bs.parameters;
+    this.api = bs.api;
+    
+    this.actions = {
+        'wallets' : '/wallets/',
+        'transactions' : '/transactions/',
+        'transfer' : '/transfer/',
+        'notifications' : '/emails/'
+    };
+};
+
+beepsend.wallet.prototype = {
+    
+    /**
+     * Get all wallets that are connected to this user
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    all: function(success, error)
+    {
+        this.api.execute(this.actions.wallets, "GET", {}, success, error);
+    },
+    
+    /**
+     * Get wallet details
+     * @param {int} walletId - id of wallet that we want to get
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    data: function(walletId, success, error)
+    {
+        this.api.execute(this.actions.wallets+walletId, "GET", {}, success, error);
+    },
+    
+    /**
+     * Update wallet
+     * @param {int} walletId - id of wallet that we want to update
+     * @param {type} name - name of wallet
+     * @param {type} notifyLimit - email notification limit
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    update: function(walletId, name, notifyLimit, success, error)
+    {
+        name = name || null;
+        notifyLimit = notifyLimit || null;
+        var data = {};
+        
+        if(name !== null)
+        {
+            data.name = name;
+        }
+        
+        if(notifyLimit !== null) 
+        {
+            data.notify_limit = notifyLimit;
+        }
+        
+        this.api.execute(this.actions.wallets+walletId, "PUT", data, success, error);
+    },
+    
+    /**
+     * Returns all transaction of wallet
+     * @param {int} walletId - id of wallet
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    transactions: function(walletId, success, error)
+    {
+        this.api.execute(this.actions.wallets+walletId+this.actions.transactions, "GET", {}, success, error);
+    },
+    
+    /**
+     * Transfer credits between your connection wallets
+     * @param {int} sourceId - wallet id of source wallet
+     * @param {int} targetId - wallet id of target wallet
+     * @param {float} amount - ammount of credit that we want to transfer
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    transfer: function(sourceId, targetId, amount, success, error)
+    {
+        var data = {
+            'amount' : amount
+        };
+        
+        this.api.execute(this.actions.wallets+sourceId+this.actions.transfer+targetId+"/", "POST", data, success, error);
+    },
+    
+    /**
+     * Get a list of your external emails
+     * @param {int} walletId - id of wallet
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    notifications: function(walletId, success, error)
+    {
+        this.api.execute(this.actions.wallets+walletId+this.actions.notifications, "GET", {}, success, error);
+    },
+    
+    /**
+     * Add external email for notifications to wallet
+     * @param {int} walletId - id of wallet
+     * @param {string} email - email address
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    addNotificationEmail: function(walletId, email, success, error)
+    {
+        var data = {
+            'email' : email
+        };
+        
+        this.api.execute(this.actions.wallets+walletId+this.actions.notifications, 'POST', data, success, error);
+    },
+    
+    /**
+     * Delete external email for notifications to wallet
+     * @param {type} walletId - id of wallet
+     * @param {type} emailId - email id
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    deleteNotificationEmail: function(walletId, emailId, success, error)
+    {
+        this.api.execute(this.actions.wallets+walletId+this.actions.notifications+emailId, 'DELETE', {}, success, error);
     }
     
 };
@@ -1039,7 +1184,7 @@ beepsend.api.prototype = {
         return url;
     },
     
-    resource: function(resource, type, data, callback, error)
+    execute: function(resource, type, data, callback, error)
     {
 //        if(typeof $ == 'undefined') {
             this.resourceHandler(resource, type, data, callback, error);
