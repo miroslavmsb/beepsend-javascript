@@ -99,6 +99,16 @@ beepsend.prototype = (function() {
         message: function()
         {
             return new beepsend.message(this);
+        },
+        
+        pricelist: function()
+        {
+            return new beepsend.pricelist(this);
+        },
+        
+        search: function()
+        {
+            return new beepsend.search(this);
         }
         
     };
@@ -881,6 +891,16 @@ beepsend.message.prototype = {
             this.api.resource(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
         },
         
+        /**
+         * Estimate SMS cost for group
+         * @param {int|array} groups - group id or array with group ids
+         * @param {string} message - text message
+         * @param {string} connection - Connection id to use for sending sms
+         * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
+         * @param {function} success - callback function for handling success response
+         * @param {function} error - callback function for handling error
+         * @returns {object}
+         */
         estimateCostGroup: function(groups, message, connection, encoding, success, error)
         {
             connection = connection || "";
@@ -894,6 +914,92 @@ beepsend.message.prototype = {
             this.api.resource(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
         }
         
+};
+
+beepsend.pricelist = function(bs)
+{
+    this.parameters = bs.parameters;
+    this.api = bs.api;
+    
+    this.actions = {
+        'connections' : '/connections/',
+        'pricelists' : '/pricelists/current',
+        'download' : '/pricelists/'
+    };
+};
+
+beepsend.pricelist.prototype = {
+    
+    /**
+     * Get customer data
+     * @param {int} connection - id of connection
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    get: function(connection, success, error)
+    {
+        connection = connection || "me";
+        this.api.resource(this.actions.connections+connection+this.actions.pricelists, "GET", {}, success, error);
+    },
+    
+    
+    
+};
+
+beepsend.search = function(bs)
+{
+    this.parameters = bs.parameters;
+    this.api = bs.api;
+    
+    this.actions = {
+        'contacts' : '/search/contacts/',
+        'groups' : '/search/contact_groups/'
+    };
+};
+
+beepsend.search.prototype = {
+    
+    /**
+     * Search for contacts
+     * @param {string} query - will search entries matching on id, msisdn, firstname and lastname
+     * @param {int} groupId - id of group, this is optional parameter, if we want search in group just pass null as value for this param
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    contacts: function(query, groupId, success, error)
+    {
+        groupId = groupId || null;
+        
+        var data = {
+            'query' : query
+        };
+        
+        if(groupId !== null)
+        {
+            data.group_id = groupId;
+        }
+        
+        this.api.resource(this.actions.contacts, "GET", data, success, error);
+    },
+    
+    /**
+     * Search for groups
+     * @param {string} query - will search entries with matching name
+     * @param {function} success - callback function for handling success response
+     * @param {function} error - callback function for handling error
+     * @returns {object}
+     */
+    groups: function(query, success, error)
+    {
+        var data = {
+            'query' : query
+        };
+        
+        this.api.resource(this.actions.groups, "GET", data, success, error);
+    }
+    
 };
 
 beepsend.extend = function(def, params)
