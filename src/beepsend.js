@@ -1205,12 +1205,12 @@ beepsend.api.prototype = {
     
     execute: function(resource, type, data, callback, error)
     {
-//        if(typeof $ == 'undefined') {
+        if(typeof $ == 'undefined') {
             this.resourceHandler(resource, type, data, callback, error);
-//        }
-//        else {
-//            this.resourceJquery(resource, type, data, callback, error);
-//        }
+        }
+        else {
+            this.resourceJquery(resource, type, data, callback, error);
+        }
     },
     
     /**
@@ -1328,7 +1328,7 @@ beepsend.api.prototype = {
      * @param {object} data - response data
      */
     successCallback: function(data) {
-//        console.log(data);
+        console.log(data);
     },
     
     /**
