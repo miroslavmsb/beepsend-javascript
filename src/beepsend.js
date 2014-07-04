@@ -66,36 +66,64 @@ beepsend.prototype = (function() {
             return new beepsend.contact(this);
         },
         
+        /**
+         * Get customer resource
+         * @returns {beepsend.customer}
+         */
         customer: function()
         {
             return new beepsend.customer(this);
         },
         
+        /**
+         * Get connection resource
+         * @returns {beepsend.connection}
+         */
         connection: function()
         {
             return new beepsend.connection(this);
         },
         
+        /**
+         * Get HLR resource
+         * @returns {beepsend.hlr}
+         */
         hlr: function()
         {
             return new beepsend.hlr(this);
         },
         
+        /**
+         * Get message resource
+         * @returns {beepsend.message}
+         */
         message: function()
         {
             return new beepsend.message(this);
         },
         
+        /**
+         * Get pricelist resource
+         * @returns {beepsend.pricelist}
+         */
         pricelist: function()
         {
             return new beepsend.pricelist(this);
         },
         
+        /**
+         * Get search resource
+         * @returns {beepsend.search}
+         */
         search: function()
         {
             return new beepsend.search(this);
         },
         
+        /**
+         * Get wallet resource
+         * @returns {beepsend.wallet}
+         */
         wallet: function()
         {
             return new beepsend.wallet(this);
