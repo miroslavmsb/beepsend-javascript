@@ -20,22 +20,7 @@ var beepsend = function(params) {
 };
 
 beepsend.prototype = (function() {
-    
-    /**
-     * Function for extending object properties
-     * @param {object} def
-     * @param {object} params
-     * @returns object default params
-     */
-    var extend = function(def, params) {
-        for(var key in params) {
-            if(params.hasOwnProperty(key)) {
-                def[key] = params[key];
-            }
-        }
-        return def;
-    };
-        
+            
     return {
         /**
          * Function for seting api params 
@@ -48,7 +33,7 @@ beepsend.prototype = (function() {
             }
             params = params || {};
             /* Extending default parameters with passed in Library initialization */
-            this.parameters = extend(this.parameters, params);
+            this.parameters = beepsend.extend(this.parameters, params);
             
             /* Get api instance */
             this.api = new beepsend.api(this.parameters);
@@ -1147,6 +1132,12 @@ beepsend.wallet.prototype = {
     
 };
 
+/**
+ * Function for extending object properties
+ * @param {object} def
+ * @param {object} params
+ * @returns object default params
+ */
 beepsend.extend = function(def, params)
 {
     for(var key in params) {
@@ -1226,7 +1217,6 @@ beepsend.api.prototype = {
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 //            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
 //            xhr.setRequestHeader("Content-length", data.length);
-//            xhr.setRequestHeader("Connection", "close");
             xhr.send(this.serialize(data));
         }
         
@@ -1235,11 +1225,11 @@ beepsend.api.prototype = {
         }       
         
         xhr.onreadystatechange = function() {
-            if(xhr.readyState == 4 && xhr.status == 200) {
+            if(xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201 || xhr.status == 204)) {
                 callback(JSON.parse(xhr.responseText));
             }
             else {
-//                error(xhr, xhr.status, resource);
+                error(xhr, xhr.status, resource);
             }
         }
         
@@ -1310,7 +1300,7 @@ beepsend.api.prototype = {
      * @param {object} data - response data
      */
     successCallback: function(data) {
-        console.log(data);
+//        console.log(data);
     },
     
     /**
@@ -1319,19 +1309,83 @@ beepsend.api.prototype = {
      */
     errorCallback: function(xhr, status, resource) {
         switch (xhr.status) {
+            case 401:
+                throw new beepsend.InvalidToken("A valid user API-token is required.");
+            case 403:
+                throw new beepsend.InvalidRequest(beepsend.parseError(xhr));
+                break;
             case 404:
-                console.log('Error: Not found');
+                throw new beepsend.NotFound("Call you are looking for not existing, this means that something is wrong with API or this SDK.");
                 break;
             case 500:
-                console.log('Error: Server error');
+                throw new beepsend.InternalError("Something is wrong with API, please try again later.");
                 break;
-            case 0:
-                console.log('Error: Request aborted');
-                break;
-            default:
-                console.log('Error: Unknown error ' + status);
                 
         } 
     },
     
+};
+
+beepsend.parseError = function(xhr)
+{
+    if(xhr.response != '') {
+        var errors = [];
+        var response = JSON.parse(xhr.response);
+        if(typeof response.errors != "undefined") {
+            for(var i in response.errors) {
+                errors.push(response.errors[i].description);
+            }
+            return errors.toString();
+        }
+        else if(typeof response[0].errors != "undefined") {
+            return response[0].errors;
+            for(var i in response[0].errors) {
+                errors.push(response[0].errors[i].description);
+            }
+            return errors.toString();
+        }
+    }
+    else {
+        return "Unknown error has occurred!"
+    }
+}
+
+beepsend.InvalidToken = function(msg) 
+{
+    return { 
+        name:        "Application Error", 
+        level:       "Show Stopper", 
+        message:     msg, 
+        toString:    function(){return this.name + ": " + this.message;} 
+    }; 
+};
+
+beepsend.InvalidRequest = function(msg)
+{
+    return {
+        name:        "Invalid request", 
+        level:       "Show Stopper", 
+        message:     msg, 
+        toString:    function(){return this.name + ": " + this.message;}
+    };
+};
+
+beepsend.NotFound = function(msg) 
+{
+    return { 
+        name:        "Not Found", 
+        level:       "Show Stopper", 
+        message:     msg, 
+        toString:    function(){return this.name + ": " + this.message;} 
+    }; 
+};
+
+beepsend.InternalError = function(msg) 
+{
+    return { 
+        name:        "System Error", 
+        level:       "Show Stopper", 
+        message:     msg, 
+        toString:    function(){return this.name + ": " + this.message;} 
+    }; 
 };
