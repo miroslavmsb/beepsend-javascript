@@ -28,9 +28,6 @@ beepsend.prototype = (function() {
          */
         initialize: function(params)
         {
-            if(typeof $ == 'undefined') {
-                throw new Error('beepsend plug-in requires jQuery');
-            }
             params = params || {};
             /* Extending default parameters with passed in Library initialization */
             this.parameters = beepsend.extend(this.parameters, params);
