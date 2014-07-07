@@ -12,7 +12,7 @@ var beepsend = function(params) {
         'api_hlr_token': '',
         'api_url' : 'api.beepsend.com',
         'api_protocol' : 'https://',
-        'api_port' : '80',
+        'api_port' : '443',
         'api_version' : '2',
     };
     
@@ -149,7 +149,7 @@ beepsend.user = function(bs)
         'passwordreset' : 'passwordreset',
         'tokenreset' : '/tokenreset'
     };
-}
+};
 
 beepsend.user.prototype = {
     
@@ -159,9 +159,9 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} - user object
      */
-    data: function(success, error)
+    data: function()
     {
-        this.api.execute(this.actions.users+this.user, "GET", {}, success, error);
+        return this.api.execute(this.actions.users+this.user, "GET", {});
     },
     
     /**
@@ -172,9 +172,9 @@ beepsend.user.prototype = {
      * @returns {object} updated user object
      * @link http://api.beepsend.com/docs.html#user-update
      */
-    update: function(options, success, error)
+    update: function(options)
     {
-        this.api.execute(this.actions.users+this.user, "PUT", options, success, error);
+        return this.api.execute(this.actions.users+this.user, "PUT", options);
     },
     
     /**
@@ -185,13 +185,13 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    updateEmail: function(email, password, success, error)
+    updateEmail: function(email, password)
     {
         var data = {
             "email" : email,
             "password" : password
         };
-        this.api.execute(this.actions.users+this.user+'/'+this.actions.email, "PUT", data, success, error);
+        return this.api.execute(this.actions.users+this.user+'/'+this.actions.email, "PUT", data);
     },
     
     /**
@@ -202,13 +202,13 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    updatePassword: function(oldPassword, newPassword, success, error)
+    updatePassword: function(oldPassword, newPassword)
     {
         var data = {
             'password' : oldPassword,
             'new_password' : newPassword
         };
-        this.api.execute(this.actions.users+this.user+'/'+this.actions.password, "PUT", data, success, error);
+        return this.api.execute(this.actions.users+this.user+'/'+this.actions.password, "PUT", data);
     },
     
     /**
@@ -218,12 +218,12 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} user object
      */
-    resetUserPassword: function(email, success, error)
+    resetUserPassword: function(email)
     {
         var data = {
             "email" : email
         };
-        this.api.execute(this.actions.users+this.actions.passwordreset, "GET", data, success, error);
+        return this.api.execute(this.actions.users+this.actions.passwordreset, "GET", data);
     },
     
     /**
@@ -234,12 +234,12 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} user object
      */
-    setNewPassword: function(hash, password, success, error)
+    setNewPassword: function(hash, password)
     {
         var data = {
             'password' : password
         };
-        this.api.execute(this.actions.users+this.actions.password+'/'+hash, "PUT", data, success, error);
+        return this.api.execute(this.actions.users+this.actions.password+'/'+hash, "PUT", data);
     },
     
     /**
@@ -249,12 +249,12 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} new user token
      */
-    resetUserToken: function(password, success, error)
+    resetUserToken: function(password)
     {
         var data = {
             'password' : password
         };
-        this.api.execute(this.actions.users+this.user+this.actions.tokenreset, "GET", data, success, error);
+        return this.api.execute(this.actions.users+this.user+this.actions.tokenreset, "GET", data);
     },
     
     /**
@@ -264,9 +264,9 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    verifyEmail: function(hash, success, error)
+    verifyEmail: function(hash)
     {
-        this.api.execute(this.actions.users+this.actions.email+'/'+hash, "GET", {}, success, error);
+        return this.api.execute(this.actions.users+this.actions.email+'/'+hash, "GET", {});
     },
     
     /**
@@ -276,9 +276,9 @@ beepsend.user.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    verifyPhone: function(hash, success, error)
+    verifyPhone: function(hash)
     {
-        this.api.execute(this.actions.users+this.actions.phone+'/'+hash, "GET", {}, success, error);
+        return this.api.execute(this.actions.users+this.actions.phone+'/'+hash, "GET", {});
     }
     
 };
@@ -308,7 +308,7 @@ beepsend.analytic.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    summary: function(connection, fromDate, toDate, success, error)
+    summary: function(connection, fromDate, toDate)
     {
         connection = connection || '';
         fromDate = fromDate || null;
@@ -324,7 +324,7 @@ beepsend.analytic.prototype = {
             data.to_date = toDate;
         }
         
-        this.api.execute(this.actions.summary+connection, "GET", data, success, error);
+        return this.api.execute(this.actions.summary+connection, "GET", data);
     },
     
     /**
@@ -338,7 +338,7 @@ beepsend.analytic.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    network: function(connection, fromDate, toDate, MCC, MNC, success, error)
+    network: function(connection, fromDate, toDate, MCC, MNC)
     {
         connection = connection || null;
         fromDate = fromDate || null;
@@ -364,7 +364,7 @@ beepsend.analytic.prototype = {
             data.MNC = MNC;
         }
         
-        this.api.execute(this.actions.network+connection, "GET", data, success, error);
+        return this.api.execute(this.actions.network+connection, "GET", data);
         
     },
     
@@ -375,10 +375,10 @@ beepsend.analytic.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {undefined}
      */
-    batch: function(batchId, success, error)
+    batch: function(batchId)
     {
         batchId = batchId || null;
-        this.api.execute(this.actions.batch+batchId, "GET", {}, success, error);
+        return this.api.execute(this.actions.batch+batchId, "GET", {});
     }
     
 };
@@ -404,9 +404,9 @@ beepsend.connection.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {collection} collection with all connection objects
      */
-    all: function(success, error) 
+    all: function() 
     {
-        this.api.execute(this.actions.connections, "GET", {}, success, error);
+        return this.api.execute(this.actions.connections, "GET", {});
     },
     
     /**
@@ -416,10 +416,10 @@ beepsend.connection.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {undefined}
      */
-    data: function(connection, success, error)
+    data: function(connection)
     {
         connection = connection || 'me';
-        this.api.execute(this.actions.connections+connection, "GET", {}, success, error);
+        return this.api.execute(this.actions.connections+connection, "GET", {});
     },
     
     /**
@@ -432,10 +432,10 @@ beepsend.connection.prototype = {
      * @description for details about available options for updating see api documentation
      * @link http://api.beepsend.com/docs.html#connection-update
      */
-    update: function(connection, options, success, error)
+    update: function(connection, options)
     {
         connection = connection || 'me';
-        this.api.execute(this.actions.connections+connection, "PUT", options, success, error);
+        return this.api.execute(this.actions.connections+connection, "PUT", options);
     },
     
     /**
@@ -445,9 +445,9 @@ beepsend.connection.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} json response with new token
      */
-    resetToken: function(connection, success, error)
+    resetToken: function(connection)
     {
-        this.api.execute(this.actions.connections+connection+this.actions.tokenreset, "GET", {}, success, error);
+        return this.api.execute(this.actions.connections+connection+this.actions.tokenreset, "GET", {});
     },
     
     /**
@@ -457,10 +457,10 @@ beepsend.connection.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    resetPassword: function(connection, success, error)
+    resetPassword: function(connection)
     {
         connection = connection || "me";
-        this.api.execute(this.actions.connection+connection+this.actions.passwordreset, "GET", {}, success, error);
+        return this.api.execute(this.actions.connection+connection+this.actions.passwordreset, "GET", {});
     }
     
 };
@@ -488,7 +488,7 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {collection} collection of contacts objects
      */
-    all: function(group, sort, success, error)
+    all: function(group, sort)
     {
         group = group || null;
         sort = sort || null;
@@ -503,7 +503,7 @@ beepsend.contact.prototype = {
             data.sort = sort;
         }
         
-        this.api.execute(this.actions.contacts, "GET", data, success, error);
+        return this.api.execute(this.actions.contacts, "GET", data);
         
     },
     
@@ -517,7 +517,7 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} created contact object
      */
-    add: function(msisdn, firstName, lastName, groupId, success, error)
+    add: function(msisdn, firstName, lastName, groupId)
     {
         firstName = firstName || null;
         lastName = lastName || null;
@@ -539,7 +539,7 @@ beepsend.contact.prototype = {
             data.group_id = groupId;
         }
         
-        this.api.execute(this.actions.contacts, "POST", data, success, error);
+        return this.api.execute(this.actions.contacts, "POST", data);
         
     },
     
@@ -551,9 +551,9 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} updated contact object
      */
-    update: function(contactId, options, success, error)
+    update: function(contactId, options)
     {
-        this.api.execute(this.actions.contacts+contactId, "PUT", options, success, error);
+        return this.api.execute(this.actions.contacts+contactId, "PUT", options);
     },
     
     /**
@@ -563,9 +563,9 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    delete: function(contactId, success, error)
+    delete: function(contactId)
     {
-        this.api.execute(this.actions.contacts+contactId, "DELETE", {}, success, error);
+        return this.api.execute(this.actions.contacts+contactId, "DELETE", {});
     },
     
     /**
@@ -574,9 +574,9 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {collection} collection of contact groups objects
      */
-    groups: function(success, error)
+    groups: function()
     {
-        this.api.execute(this.actions.groups, "GET", {}, success, error);
+        return this.api.execute(this.actions.groups, "GET", {});
     },
     
     /**
@@ -586,9 +586,9 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {undefined}
      */
-    group: function(groupId, success, error)
+    group: function(groupId)
     {
-        this.api.execute(this.actions.groups+groupId, "GET", {}, success, error);
+        return this.api.execute(this.actions.groups+groupId, "GET", {});
     },
     
     /**
@@ -598,12 +598,12 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} object of created contact group
      */
-    addGroup: function(groupName, success, error)
+    addGroup: function(groupName)
     {
         var data = {
             "name" : groupName
         };
-        this.api.execute(this.actions.groups, "POST", data, success, error);
+        return this.api.execute(this.actions.groups, "POST", data);
     },
     
     /**
@@ -614,12 +614,12 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object} object of updated contacts group
      */
-    updateGroup: function(groupId, groupName, success, error)
+    updateGroup: function(groupId, groupName)
     {
         var data = {
             "name" : groupName
         };
-        this.api.execute(this.actions.groups+groupId, "PUT", data, success, error);
+        return this.api.execute(this.actions.groups+groupId, "PUT", data);
     },
     
     /**
@@ -629,9 +629,9 @@ beepsend.contact.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    deleteGroup: function(groupId, success, error) 
+    deleteGroup: function(groupId) 
     {
-        this.api.execute(this.actions.groups+groupId, "DELETE", {}, success, error);
+        return this.api.execute(this.actions.groups+groupId, "DELETE", {});
     },
     
     /**
@@ -643,14 +643,14 @@ beepsend.contact.prototype = {
      * @returns {object}
      * @todo need to check this function, when we get CORS for POST and PUT request enabled on API
      */
-    upload: function(file, groupId, success, error)
+    upload: function(file, groupId)
     {
         var that = this;
         var reader = new FileReader();
         reader.readAsText(file);
         reader.onload = function(event) {
            var fileContent = event.target.result;
-           that.api.resourceRaw(that.actions.groups+groupId+that.actions.upload, "POST", fileContent, success, error);
+           that.api.resourceRaw(that.actions.groups+groupId+that.actions.upload, "POST", fileContent);
         };
     }
     
@@ -674,9 +674,9 @@ beepsend.customer.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    data: function(success, error)
+    data: function()
     {
-        this.api.execute(this.actions.data, "GET", {}, success, error);
+        return this.api.execute(this.actions.data, "GET", {});
     }
     
 };
@@ -702,10 +702,10 @@ beepsend.hlr.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    intermediate: function(msisdn, connection, success, error)
+    intermediate: function(msisdn, connection)
     {
         connection = connection || "me";
-        this.api.execute(this.actions.hlr+msisdn, "GET", {"connection" : connection}, success, error);
+        return this.api.execute(this.actions.hlr+msisdn, "GET", {"connection" : connection});
     },
     
     /**
@@ -717,13 +717,13 @@ beepsend.hlr.prototype = {
      * @returns {object}
      * @description This method requires callback url on application to deliver hlr result response
      */
-    bulk: function(msisdns, connection, success, error)
+    bulk: function(msisdns, connection)
     {
         var data = {
             "msisdn" : msisdns,
             "connection" : (connection) ? connection : "me"
         };
-        this.api.execute(this.actions.hlr, "POST", data, success, error);
+        return this.api.execute(this.actions.hlr, "POST", data);
     },
     
     /**
@@ -734,14 +734,14 @@ beepsend.hlr.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    validate: function(msisdn, connection, success, error)
+    validate: function(msisdn, connection)
     {
         connection = connection || "me";
         var data = {
             "msisdn" : msisdn,
             "connection" : (connection) ? connection : "me"
         };
-        this.api.execute(this.actions.validate, "POST", data, success, error);
+        return this.api.execute(this.actions.validate, "POST", data);
     }
     
 };
@@ -773,7 +773,7 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */        
-        send: function(from, to, message, connection, encoding, options, success, error)
+        send: function(from, to, message, connection, encoding, options)
         {
             connection = connection || "";
             encoding = encoding || "UTF-8";
@@ -788,7 +788,7 @@ beepsend.message.prototype = {
             /* extend data object with aditional options for sending sms */
             data = beepsend.extend(data, options);
             
-            this.api.execute(this.actions.sms+connection, "POST", data, success, error);
+            return this.api.execute(this.actions.sms+connection, "POST", data);
         },
         
         /**
@@ -803,7 +803,7 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */
-        groupSending: function(from, groups, message, connection, encoding, options, success, error)
+        groupSending: function(from, groups, message, connection, encoding, options)
         {
             connection = connection || "";
             encoding = encoding || "UTF-8";
@@ -818,7 +818,7 @@ beepsend.message.prototype = {
             /* extend data object with adtitional options for sending group sms */
             data = beepsend.extend(data, options);
             
-            this.api.execute(this.actions.batches+connection, "POST", data, success, error);
+            return this.api.execute(this.actions.batches+connection, "POST", data);
         },
         
         /**
@@ -828,9 +828,9 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */
-        lookup: function(messageId, success, error)
+        lookup: function(messageId)
         {
-            this.api.execute(this.actions.sms+messageId, "GET", {}, success, error);
+            return this.api.execute(this.actions.sms+messageId, "GET", {});
         },
         
         /**
@@ -840,10 +840,10 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */
-        multipleLookup: function(options, success, error)
+        multipleLookup: function(options)
         {
             options = options || {};
-            this.api.execute(this.actions.sms, "GET", options, success, error);
+            return this.api.execute(this.actions.sms, "GET", options);
         },
         
         /**
@@ -858,7 +858,7 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */
-        validate: function(from, to, message, connection, encoding, options, success, error)
+        validate: function(from, to, message, connection, encoding, options)
         {
             connection = connection || "";
             encoding = encoding || "UTF-8";
@@ -873,7 +873,7 @@ beepsend.message.prototype = {
             /* extend data object with adtitional options for validating sms */
             data = beepsend.extend(data, options);
             
-            this.api.execute(this.actions.validate+connection, "POST", data, success, error);
+            return this.api.execute(this.actions.validate+connection, "POST", data);
         },
         
         /**
@@ -882,9 +882,9 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */
-        batches: function(success, error)
+        batches: function()
         {
-            this.api.execute(this.actions.batches, "GET", {}, success, error);
+            return this.api.execute(this.actions.batches, "GET", {});
         },
         
         /**
@@ -897,7 +897,7 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */
-        estimateCost: function(to, message, connection, encoding, success, error)
+        estimateCost: function(to, message, connection, encoding)
         {
             connection = connection || "";
             encoding = encoding || "UTF-8";
@@ -906,7 +906,7 @@ beepsend.message.prototype = {
                 'message' : message,
                 'encoding' : encoding
             };
-            this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
+            return this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data);
         },
         
         /**
@@ -919,7 +919,7 @@ beepsend.message.prototype = {
          * @param {function} error - callback function for handling error
          * @returns {object}
          */
-        estimateCostGroup: function(groups, message, connection, encoding, success, error)
+        estimateCostGroup: function(groups, message, connection, encoding)
         {
             connection = connection || "";
             encoding = encoding || "UTF-8";
@@ -929,7 +929,7 @@ beepsend.message.prototype = {
                 'encoding' : encoding
             };
             
-            this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data, success, error);
+            return this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data);
         }
         
 };
@@ -955,10 +955,10 @@ beepsend.pricelist.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    get: function(connection, success, error)
+    get: function(connection)
     {
         connection = connection || "me";
-        this.api.execute(this.actions.connections+connection+this.actions.pricelists, "GET", {}, success, error);
+        return this.api.execute(this.actions.connections+connection+this.actions.pricelists, "GET", {});
     },
     
     
@@ -986,7 +986,7 @@ beepsend.search.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    contacts: function(query, groupId, success, error)
+    contacts: function(query, groupId)
     {
         groupId = groupId || null;
         
@@ -999,7 +999,7 @@ beepsend.search.prototype = {
             data.group_id = groupId;
         }
         
-        this.api.execute(this.actions.contacts, "GET", data, success, error);
+        return this.api.execute(this.actions.contacts, "GET", data);
     },
     
     /**
@@ -1009,13 +1009,13 @@ beepsend.search.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    groups: function(query, success, error)
+    groups: function(query)
     {
         var data = {
             'query' : query
         };
         
-        this.api.execute(this.actions.groups, "GET", data, success, error);
+        return this.api.execute(this.actions.groups, "GET", data);
     }
     
 };
@@ -1041,9 +1041,9 @@ beepsend.wallet.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    all: function(success, error)
+    all: function()
     {
-        this.api.execute(this.actions.wallets, "GET", {}, success, error);
+        return this.api.execute(this.actions.wallets, "GET", {});
     },
     
     /**
@@ -1053,9 +1053,9 @@ beepsend.wallet.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    data: function(walletId, success, error)
+    data: function(walletId)
     {
-        this.api.execute(this.actions.wallets+walletId, "GET", {}, success, error);
+        return this.api.execute(this.actions.wallets+walletId, "GET", {});
     },
     
     /**
@@ -1067,7 +1067,7 @@ beepsend.wallet.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    update: function(walletId, name, notifyLimit, success, error)
+    update: function(walletId, name, notifyLimit)
     {
         name = name || null;
         notifyLimit = notifyLimit || null;
@@ -1083,7 +1083,7 @@ beepsend.wallet.prototype = {
             data.notify_limit = notifyLimit;
         }
         
-        this.api.execute(this.actions.wallets+walletId, "PUT", data, success, error);
+        return this.api.execute(this.actions.wallets+walletId, "PUT", data);
     },
     
     /**
@@ -1093,27 +1093,27 @@ beepsend.wallet.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    transactions: function(walletId, success, error)
+    transactions: function(walletId)
     {
-        this.api.execute(this.actions.wallets+walletId+this.actions.transactions, "GET", {}, success, error);
+        return this.api.execute(this.actions.wallets+walletId+this.actions.transactions, "GET", {});
     },
     
     /**
      * Transfer credits between your connection wallets
      * @param {int} sourceId - wallet id of source wallet
      * @param {int} targetId - wallet id of target wallet
-     * @param {float} amount - ammount of credit that we want to transfer
+     * @param {float} amount - amount of credit that we want to transfer
      * @param {function} success - callback function for handling success response
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    transfer: function(sourceId, targetId, amount, success, error)
+    transfer: function(sourceId, targetId, amount)
     {
         var data = {
             'amount' : amount
         };
         
-        this.api.execute(this.actions.wallets+sourceId+this.actions.transfer+targetId+"/", "POST", data, success, error);
+        return this.api.execute(this.actions.wallets+sourceId+this.actions.transfer+targetId+"/", "POST", data);
     },
     
     /**
@@ -1123,9 +1123,9 @@ beepsend.wallet.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    notifications: function(walletId, success, error)
+    notifications: function(walletId)
     {
-        this.api.execute(this.actions.wallets+walletId+this.actions.notifications, "GET", {}, success, error);
+        return this.api.execute(this.actions.wallets+walletId+this.actions.notifications, "GET", {});
     },
     
     /**
@@ -1136,13 +1136,13 @@ beepsend.wallet.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    addNotificationEmail: function(walletId, email, success, error)
+    addNotificationEmail: function(walletId, email)
     {
         var data = {
             'email' : email
         };
         
-        this.api.execute(this.actions.wallets+walletId+this.actions.notifications, 'POST', data, success, error);
+        return this.api.execute(this.actions.wallets+walletId+this.actions.notifications, 'POST', data);
     },
     
     /**
@@ -1153,9 +1153,9 @@ beepsend.wallet.prototype = {
      * @param {function} error - callback function for handling error
      * @returns {object}
      */
-    deleteNotificationEmail: function(walletId, emailId, success, error)
+    deleteNotificationEmail: function(walletId, emailId)
     {
-        this.api.execute(this.actions.wallets+walletId+this.actions.notifications+emailId, 'DELETE', {}, success, error);
+        return this.api.execute(this.actions.wallets+walletId+this.actions.notifications+emailId, 'DELETE', {});
     }
     
 };
@@ -1199,17 +1199,17 @@ beepsend.api.prototype = {
     buildRequestUrl: function(path) {
         path = path || '';
         var apiToken = (this.hlr) ? this.parameters.api_hlr_token : this.parameters.api_token;
-        var url = this.parameters.api_protocol+this.parameters.api_url/*+":"+this.parameters.api_port*/+'/'+this.parameters.api_version+path+"?api_token="+apiToken;
+        var url = this.parameters.api_protocol+this.parameters.api_url+":"+this.parameters.api_port+'/'+this.parameters.api_version+path+"?api_token="+apiToken;
         return url;
     },
     
-    execute: function(resource, type, data, callback, error)
+    execute: function(resource, type, data)
     {
         if(typeof $ == 'undefined') {
-            this.resourceHandler(resource, type, data, callback, error);
+            return this.resourceHandler(resource, type, data);
         }
         else {
-            this.resourceJquery(resource, type, data, callback, error);
+            return this.resourceJquery(resource, type, data);
         }
     },
     
@@ -1221,7 +1221,7 @@ beepsend.api.prototype = {
      * @param {string} callback - this is name of success callback function to process received data
      * @param {string} error - this is name of error callback function to process errors on requests
      */
-    resourceHandler: function(resource, type, data, callback, error)
+    resourceHandler: function(resource, type, data)
     {
         if (window.XMLHttpRequest){
             var xhr = new XMLHttpRequest();   
@@ -1229,8 +1229,7 @@ beepsend.api.prototype = {
             var xhr = new ActiveXObject("Microsoft.XMLHTTP");
         };
         
-        callback = callback || this.successCallback;
-        error = error || this.errorCallback;
+        var deferred = new beepsend.Deferred();
         
         var fullResourceUrl = this.buildRequestUrl(resource);
         
@@ -1253,21 +1252,20 @@ beepsend.api.prototype = {
         }       
         
         xhr.onreadystatechange = function() {
-            if(xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201 || xhr.status == 204)) {
-                callback(JSON.parse(xhr.responseText));
-            }
-            else {
-                error(xhr, xhr.status, resource);
-            }
+            if(xhr.readyState == 4) {
+                if(xhr.status == 200 || xhr.status == 201 || xhr.status == 204) {
+                    deferred.resolve(JSON.parse(xhr.response));
+                } else {
+                    deferred.reject(xhr);
+                }
+            }            
         }
-        
+        return deferred.promise;
     },
     
-    resourceJquery: function(resource, type, data, callback, error) {
-        /* Set default handler functions */
-        callback = callback || this.successCallback;
-        error = error || this.errorCallback;
-        
+    resourceJquery: function(resource, type, data) {
+       
+       var deferred = new beepsend.Deferred();
         /* Generate full url for api call */
         var fullResourceUrl = this.buildRequestUrl(resource);
         
@@ -1279,9 +1277,11 @@ beepsend.api.prototype = {
             dataType: 'json',
             async: true,
             data: data,
-            success: callback,
-            error: error
+            success: $.proxy(deferred.resolve, deferred),
+            error: $.proxy(deferred.reject, deferred)
         });
+        
+        return deferred.promise;
     },
     
     resourceRaw: function(resource, type, data, callback, error) {
@@ -1321,6 +1321,56 @@ beepsend.api.prototype = {
             encodeURIComponent(k) + "=" + encodeURIComponent(v));
         }
         return str.join("&");
+    }
+    
+};
+
+beepsend.Promise = function()
+{
+    this.successCallbacks = [];
+    this.errorCallbacks = [];
+};
+
+beepsend.Promise.prototype = {
+    successCallbacks: null,
+    errorCallbacks: null,
+    then: function (successCallback, errorCallback) {
+        this.successCallbacks.push(successCallback);
+        if (errorCallback) {
+            this.errorCallbacks.push(errorCallback);
+        }
+    }
+};
+
+beepsend.Deferred = function()
+{
+    this.promise = new beepsend.Promise();
+};
+
+beepsend.Deferred.prototype = {
+    promise: null,
+    resolve: function (data) {
+        if(this.promise.successCallbacks.length > 0) {
+            this.promise.successCallbacks.forEach(function(callback) {
+                window.setTimeout(function () {
+                    callback(data);
+                }, 0);
+            });
+        } else {
+            this.successCallback(data);
+        }
+    },
+
+    reject: function (error) {
+        if(this.promise.errorCallbacks.length > 0) {
+            this.promise.errorCallbacks.forEach(function(callback) {
+                window.setTimeout(function () {
+                    callback(error);
+                }, 0);
+            });
+        } else {
+            this.errorCallback(error);
+        }
     },
     
     /**
@@ -1328,14 +1378,14 @@ beepsend.api.prototype = {
      * @param {object} data - response data
      */
     successCallback: function(data) {
-        console.log(data);
+//        console.log(data);
     },
     
     /**
      * Default error callback function
      * @param {object} error - error object
      */
-    errorCallback: function(xhr, status, resource) {
+    errorCallback: function(xhr) {
         switch (xhr.status) {
             case 401:
                 throw new beepsend.InvalidToken("A valid user API-token is required.");
@@ -1376,7 +1426,7 @@ beepsend.parseError = function(xhr)
     else {
         return "Unknown error has occurred!"
     }
-}
+};
 
 beepsend.InvalidToken = function(msg) 
 {
