@@ -13,7 +13,7 @@ var beepsend = function(params) {
         'api_url' : 'api.beepsend.com',
         'api_protocol' : 'https://',
         'api_port' : '443',
-        'api_version' : '2',
+        'api_version' : '2'
     };
     
     this.initialize(params);
@@ -152,8 +152,6 @@ beepsend.user.prototype = {
     
     /**
      * Get user details
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} - user object
      */
     data: function()
@@ -164,8 +162,6 @@ beepsend.user.prototype = {
     /**
      * Update user
      * @param {object} options object for user that we want to update
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} updated user object
      * @link http://api.beepsend.com/docs.html#user-update
      */
@@ -178,8 +174,6 @@ beepsend.user.prototype = {
      * Update user email
      * @param {string} email - new email address
      * @param {string} password - password of user account
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     updateEmail: function(email, password)
@@ -195,8 +189,6 @@ beepsend.user.prototype = {
      * Update user password
      * @param {string} oldPassword
      * @param {string} newPassword
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     updatePassword: function(oldPassword, newPassword)
@@ -211,8 +203,6 @@ beepsend.user.prototype = {
     /**
      * Reset user password
      * @param {string} email - email for password reset
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} user object
      */
     resetUserPassword: function(email)
@@ -227,8 +217,6 @@ beepsend.user.prototype = {
      * Set new password
      * @param {string} hash - is sent to you by email address
      * @param {string} password - new password
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} user object
      */
     setNewPassword: function(hash, password)
@@ -242,8 +230,6 @@ beepsend.user.prototype = {
     /**
      * Reset user token
      * @param {string} password - user password
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} new user token
      */
     resetUserToken: function(password)
@@ -257,8 +243,6 @@ beepsend.user.prototype = {
     /**
      * Verify email address
      * @param {string} hash - is sent to you via email
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     verifyEmail: function(hash)
@@ -269,8 +253,6 @@ beepsend.user.prototype = {
     /**
      * Verify phone number
      * @param {type} hash - has from sms message
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     verifyPhone: function(hash)
@@ -301,8 +283,6 @@ beepsend.analytic.prototype = {
      * @param {string} connection - connection id or string "me"
      * @param {int} fromDate - Unix time
      * @param {int} toDate - Unix time
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     summary: function(connection, fromDate, toDate)
@@ -331,8 +311,6 @@ beepsend.analytic.prototype = {
      * @param {int} toDate - Unix time
      * @param {string} MCC - Mobile country code
      * @param {string} MNC - Mobile network code
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     network: function(connection, fromDate, toDate, MCC, MNC)
@@ -368,8 +346,6 @@ beepsend.analytic.prototype = {
     /**
      * This call will give you delivery statistics for a whole batch
      * @param {int} batchId - batch id
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {undefined}
      */
     batch: function(batchId)
@@ -397,8 +373,6 @@ beepsend.connection.prototype = {
     
     /**
      * Get all connections
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {collection} collection with all connection objects
      */
     all: function() 
@@ -409,8 +383,6 @@ beepsend.connection.prototype = {
     /**
      * Get data for single connection
      * @param {string} connection - connection id or "me" string
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {undefined}
      */
     data: function(connection)
@@ -423,9 +395,7 @@ beepsend.connection.prototype = {
      * Update connection
      * @param {string} connection - connection id or "me" string if we want to update authorized user connection
      * @param {type} options - options that we want to update
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
-     * @returns {undefined}
+     * @returns {object}
      * @description for details about available options for updating see api documentation
      * @link http://api.beepsend.com/docs.html#connection-update
      */
@@ -438,8 +408,6 @@ beepsend.connection.prototype = {
     /**
      * Reset connection token, need to use user token to perform this action
      * @param {string} connection - connection id or "me" string
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} json response with new token
      */
     resetToken: function(connection)
@@ -450,8 +418,6 @@ beepsend.connection.prototype = {
     /**
      * Reset connection password
      * @param {type} connection - connection id or "me" string
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     resetPassword: function(connection)
@@ -481,8 +447,6 @@ beepsend.contact.prototype = {
      * Get all contact belonging to your user
      * @param {string} group - group id or name
      * @param {type} sort - Sorting of the collection. Available keys are: name, id. Can be prepended with + or - to change the sorting direction (+ ASC, - DESC).
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {collection} collection of contacts objects
      */
     all: function(group, sort)
@@ -510,8 +474,6 @@ beepsend.contact.prototype = {
      * @param {string} firstName
      * @param {string} lastName
      * @param {string} groupId
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} created contact object
      */
     add: function(msisdn, firstName, lastName, groupId)
@@ -544,8 +506,6 @@ beepsend.contact.prototype = {
      * Update existing contact
      * @param {string} contactId - id of contact that we want to update
      * @param {object} options - Available keys: msisdn, firstname, lastname, group_id
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} updated contact object
      */
     update: function(contactId, options)
@@ -556,8 +516,6 @@ beepsend.contact.prototype = {
     /**
      * Delete contact
      * @param {string} contactId - id of contact that we want to delete
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     delete: function(contactId)
@@ -567,8 +525,6 @@ beepsend.contact.prototype = {
     
     /**
      * Get all contact groups belonging to your user
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {collection} collection of contact groups objects
      */
     groups: function()
@@ -579,9 +535,7 @@ beepsend.contact.prototype = {
     /**
      * Get content of specific group
      * @param {string} groupId - id of group that we want to get
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
-     * @returns {undefined}
+     * @returns {object}
      */
     group: function(groupId)
     {
@@ -591,8 +545,6 @@ beepsend.contact.prototype = {
     /**
      * Create new contacts group
      * @param {string} groupName - name of group that we want to create
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} object of created contact group
      */
     addGroup: function(groupName)
@@ -607,8 +559,6 @@ beepsend.contact.prototype = {
      * Update contact group
      * @param {int} groupId - id of group that we want to update
      * @param {string} groupName - new name for group
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object} object of updated contacts group
      */
     updateGroup: function(groupId, groupName)
@@ -622,8 +572,6 @@ beepsend.contact.prototype = {
     /**
      * Delete contact group
      * @param {int} groupId - id of group that we want to delete
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     deleteGroup: function(groupId) 
@@ -635,8 +583,6 @@ beepsend.contact.prototype = {
      * Import contacts to group from .csv file
      * @param {string} file - html5 file object
      * @param {int} groupId - id of group that we want import contacts from csv
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      * @todo need to check this function, when we get CORS for POST and PUT request enabled on API
      */
@@ -661,14 +607,12 @@ beepsend.customer = function(bs)
     this.actions = {
         'data' : '/customer/'
     };
-}
+};
 
 beepsend.customer.prototype = {
     
     /**
      * Get customer informations
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     data: function()
@@ -695,8 +639,6 @@ beepsend.hlr.prototype = {
      * Intermediate HLR call
      * @param {int} msisdn - that we are looking HLR request
      * @param {string} connection - connection id of HLR connection
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     intermediate: function(msisdn, connection)
@@ -709,8 +651,6 @@ beepsend.hlr.prototype = {
      * Bulk HLR request
      * @param {type} msisdns - array of msisdns ["12212123", "123125344"]
      * @param {type} connection - connection id of HLR connection
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      * @description This method requires callback url on application to deliver hlr result response
      */
@@ -727,8 +667,6 @@ beepsend.hlr.prototype = {
      * Validate HLR request
      * @param {int} msisdn - that we are looking HLR request
      * @param {string} connection - connection id of HLR connection
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     validate: function(msisdn, connection)
@@ -766,8 +704,6 @@ beepsend.message.prototype = {
          * @param {string} connection - Connection id to use for sending sms
          * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
          * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */        
         send: function(from, to, message, connection, encoding, options)
@@ -796,8 +732,6 @@ beepsend.message.prototype = {
          * @param {string|int} connection - Connection id to use for sending sms
          * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
          * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */
         groupSending: function(from, groups, message, connection, encoding, options)
@@ -821,8 +755,6 @@ beepsend.message.prototype = {
         /**
          * Get message details of sent messages through Beepsend
          * @param {int} messageId - id of message
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */
         lookup: function(messageId)
@@ -833,8 +765,6 @@ beepsend.message.prototype = {
         /**
          * Get messages details of sent messages through Beepsend
          * @param {object} options - options to fetch messages. More info on: http://api.beepsend.com/docs.html#sms-lookup-multiple
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */
         multipleLookup: function(options)
@@ -851,8 +781,6 @@ beepsend.message.prototype = {
          * @param {string} connection - Connection id to use for sending sms
          * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
          * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */
         validate: function(from, to, message, connection, encoding, options)
@@ -875,8 +803,6 @@ beepsend.message.prototype = {
         
         /**
          * Get previous batches
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */
         batches: function()
@@ -890,8 +816,6 @@ beepsend.message.prototype = {
          * @param {string} message - text message
          * @param {string} connection - Connection id to use for sending sms
          * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */
         estimateCost: function(to, message, connection, encoding)
@@ -912,8 +836,6 @@ beepsend.message.prototype = {
          * @param {string} message - text message
          * @param {string} connection - Connection id to use for sending sms
          * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
-         * @param {function} success - callback function for handling success response
-         * @param {function} error - callback function for handling error
          * @returns {object}
          */
         estimateCostGroup: function(groups, message, connection, encoding)
@@ -948,8 +870,6 @@ beepsend.pricelist.prototype = {
     /**
      * Get customer data
      * @param {int} connection - id of connection
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     get: function(connection)
@@ -979,8 +899,6 @@ beepsend.search.prototype = {
      * Search for contacts
      * @param {string} query - will search entries matching on id, msisdn, firstname and lastname
      * @param {int} groupId - id of group, this is optional parameter, if we want search in group just pass null as value for this param
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     contacts: function(query, groupId)
@@ -1002,8 +920,6 @@ beepsend.search.prototype = {
     /**
      * Search for groups
      * @param {string} query - will search entries with matching name
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     groups: function(query)
@@ -1034,8 +950,6 @@ beepsend.wallet.prototype = {
     
     /**
      * Get all wallets that are connected to this user
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     all: function()
@@ -1046,8 +960,6 @@ beepsend.wallet.prototype = {
     /**
      * Get wallet details
      * @param {int} walletId - id of wallet that we want to get
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     data: function(walletId)
@@ -1060,8 +972,6 @@ beepsend.wallet.prototype = {
      * @param {int} walletId - id of wallet that we want to update
      * @param {type} name - name of wallet
      * @param {type} notifyLimit - email notification limit
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     update: function(walletId, name, notifyLimit)
@@ -1086,8 +996,6 @@ beepsend.wallet.prototype = {
     /**
      * Returns all transaction of wallet
      * @param {int} walletId - id of wallet
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     transactions: function(walletId)
@@ -1100,8 +1008,6 @@ beepsend.wallet.prototype = {
      * @param {int} sourceId - wallet id of source wallet
      * @param {int} targetId - wallet id of target wallet
      * @param {float} amount - amount of credit that we want to transfer
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     transfer: function(sourceId, targetId, amount)
@@ -1116,8 +1022,6 @@ beepsend.wallet.prototype = {
     /**
      * Get a list of your external emails
      * @param {int} walletId - id of wallet
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     notifications: function(walletId)
@@ -1129,8 +1033,6 @@ beepsend.wallet.prototype = {
      * Add external email for notifications to wallet
      * @param {int} walletId - id of wallet
      * @param {string} email - email address
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     addNotificationEmail: function(walletId, email)
@@ -1146,8 +1048,6 @@ beepsend.wallet.prototype = {
      * Delete external email for notifications to wallet
      * @param {type} walletId - id of wallet
      * @param {type} emailId - email id
-     * @param {function} success - callback function for handling success response
-     * @param {function} error - callback function for handling error
      * @returns {object}
      */
     deleteNotificationEmail: function(walletId, emailId)
@@ -1171,7 +1071,7 @@ beepsend.extend = function(def, params)
         }
     }
     return def;
-}
+};
 
 /**
  * Beepsend api communication class
@@ -1190,7 +1090,6 @@ beepsend.api.prototype = {
     /**
      * This function is used for generating url for api calls
      * @param {type} path
-     * @param {type} bs
      * @returns {String}
      */
     buildRequestUrl: function(path) {
@@ -1256,7 +1155,7 @@ beepsend.api.prototype = {
                     deferred.reject(xhr);
                 }
             }            
-        }
+        };
         return deferred.promise;
     },
     
@@ -1375,12 +1274,12 @@ beepsend.Deferred.prototype = {
      * @param {object} data - response data
      */
     successCallback: function(data) {
-//        console.log(data);
+        console.log(data);
     },
     
     /**
      * Default error callback function
-     * @param {object} error - error object
+     * @param {object} xhr response
      */
     errorCallback: function(xhr) {
         switch (xhr.status) {
@@ -1397,22 +1296,22 @@ beepsend.Deferred.prototype = {
                 break;
                 
         } 
-    },
+    }
     
 };
 
 beepsend.parseError = function(xhr)
 {
-    if(xhr.response != '') {
+    if(xhr.response !== '') {
         var errors = [];
         var response = JSON.parse(xhr.response);
-        if(typeof response.errors != "undefined") {
+        if(typeof response.errors !== "undefined") {
             for(var i in response.errors) {
                 errors.push(response.errors[i].description);
             }
             return errors.toString();
         }
-        else if(typeof response[0].errors != "undefined") {
+        else if(typeof response[0].errors !== "undefined") {
             return response[0].errors;
             for(var i in response[0].errors) {
                 errors.push(response[0].errors[i].description);
@@ -1421,7 +1320,7 @@ beepsend.parseError = function(xhr)
         }
     }
     else {
-        return "Unknown error has occurred!"
+        return "Unknown error has occurred!";
     }
 };
 
