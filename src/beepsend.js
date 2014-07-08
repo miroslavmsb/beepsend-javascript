@@ -725,6 +725,35 @@ beepsend.message.prototype = {
         },
         
         /**
+         * Send Binary SMS
+         * @param {int|string} from - phone number we are sending from or text 
+         * @param {int|array} to - Number of recipient or array with recipient numbers
+         * @param {string} message - text message
+         * @param {string} connection - Connection id to use for sending sms
+         * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
+         * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
+         * @returns {object}
+         */
+        binary: function(from, to, message, connection, encoding, options)
+        {
+            connection = connection || "";
+            encoding = encoding || "UTF-8";
+            var data = {
+                'from' : from,
+                'to' : to,
+                'message' : message,
+                'encoding' : encoding,
+                'receive_dlr' : 0,
+                'message_type' : 'binary'
+            };
+            
+            /* extend data object with aditional options for sending sms */
+            data = beepsend.extend(data, options);
+            
+            return this.api.execute(this.actions.sms+connection, "POST", data);
+        },
+        
+        /**
          * Send SMS to group of contacts
          * @param {int|string} from - phone number we are sending from or text 
          * @param {int|array} groups - id of group or array with groups ids
@@ -876,9 +905,7 @@ beepsend.pricelist.prototype = {
     {
         connection = connection || "me";
         return this.api.execute(this.actions.connections+connection+this.actions.pricelists, "GET", {});
-    },
-    
-    
+    }   
     
 };
 
@@ -1114,8 +1141,7 @@ beepsend.api.prototype = {
      * @param {string} resource - this is resource string
      * @param {string} type - type of request, GET, POST, etc...
      * @param {json} data
-     * @param {string} callback - this is name of success callback function to process received data
-     * @param {string} error - this is name of error callback function to process errors on requests
+     * @returns {beepsend.Deferred.prototype.promise}
      */
     resourceHandler: function(resource, type, data)
     {
@@ -1159,6 +1185,14 @@ beepsend.api.prototype = {
         return deferred.promise;
     },
     
+    /**
+     * jQuery resource
+     * @param {string} resource - this is resource string
+     * @param {string} type - type of request, GET, POST, etc...
+     * @param {json} data
+     * @return {object} promise object
+     * @returns {beepsend.Deferred.prototype.promise}
+     */
     resourceJquery: function(resource, type, data) {
        
        var deferred = new beepsend.Deferred();
