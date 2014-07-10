@@ -447,12 +447,16 @@ beepsend.contact.prototype = {
      * Get all contact belonging to your user
      * @param {string} group - group id or name
      * @param {type} sort - Sorting of the collection. Available keys are: name, id. Can be prepended with + or - to change the sorting direction (+ ASC, - DESC).
+     * @param {int} sinceId - Returns results more recent than the specified ID
+     * @param {string} maxId - Returns results with an ID older than or equal to the specified ID
      * @returns {collection} collection of contacts objects
      */
-    all: function(group, sort)
+    all: function(group, sort, sinceId, maxId)
     {
         group = group || null;
         sort = sort || null;
+        sinceId = sinceId || null;
+        maxId = maxId || null;
         
         var data = {};
         
@@ -462,6 +466,14 @@ beepsend.contact.prototype = {
         
         if(sort !== null) {
             data.sort = sort;
+        }
+        
+        if(sinceId !== null) {
+            data.since_id = sinceId;
+        }
+        
+        if(maxId !== null) {
+            data.max_id = maxId;
         }
         
         return this.api.execute(this.actions.contacts, "GET", data);
@@ -535,11 +547,32 @@ beepsend.contact.prototype = {
     /**
      * Get content of specific group
      * @param {string} groupId - id of group that we want to get
+     * @param {int} sinceId - Returns results more recent than the specified ID
+     * @param {string} maxId - Returns results with an ID older than or equal to the specified ID
+     * @param {string} count - How many objects to fetch. Maximum 200, default 200
      * @returns {object}
      */
-    group: function(groupId)
+    group: function(groupId, sinceId, maxId, count)
     {
-        return this.api.execute(this.actions.groups+groupId, "GET", {});
+        sinceId = sinceId || null;
+        maxId = maxId || null;
+        count = count || null;
+        
+        var data = {};
+        
+        if(sinceId !== null) {
+            data.since_id = sinceId;
+        }
+        
+        if(maxId !== null) {
+            data.max_id = maxId;
+        }
+        
+        if(count !== null) {
+            data.count = count;
+        }
+        
+        return this.api.execute(this.actions.groups+groupId, "GET", data);
     },
     
     /**
@@ -969,7 +1002,8 @@ beepsend.wallet = function(bs)
         'wallets' : '/wallets/',
         'transactions' : '/transactions/',
         'transfer' : '/transfer/',
-        'notifications' : '/emails/'
+        'notifications' : '/emails/',
+        'topup' : '/topup/paypal/'
     };
 };
 
@@ -1020,14 +1054,65 @@ beepsend.wallet.prototype = {
         return this.api.execute(this.actions.wallets+walletId, "PUT", data);
     },
     
+    
+    /**
+     * Add credit to wallet
+     * @param {type} walletId - id of wallet that we want to add credit
+     * @param {type} amount - amoutn of money that we want to add
+     * @param {type} returnUrl - The URL to redirect a user when a payment is complete and successful. Default: https://beepsend.com/success.html
+     * @param {type} cancelUrl - The URL to redirect a user when a payment is aborted. Default: https://beepsend.com/cancel.html
+     * @returns {object}
+     */
+    topup: function(walletId, amount, returnUrl, cancelUrl)
+    {
+        returnUrl = returnUrl || null;
+        cancelUrl = cancelUrl || null;
+        
+        var data = {
+            "amount" : amount
+        };
+        
+        if(returnUrl !== null) {
+            data.url.return = returnUrl;
+        }
+        
+        if(cancelUrl !== null) {
+            data.url.cancel = cancelUrl;
+        }
+        
+        return this.api.execute(this.actions.wallets+walletId+this.actions.topup, "POST", data); 
+        
+    },
+    
     /**
      * Returns all transaction of wallet
      * @param {int} walletId - id of wallet
+     * @param {int} sinceId - Returns results more recent than the specified ID
+     * @param {string} maxId - Returns results with an ID older than or equal to the specified ID
+     * @param {string} count - How many transactions to fetch. Maximum 200, default 50
      * @returns {object}
      */
-    transactions: function(walletId)
+    transactions: function(walletId, sinceId, maxId, count)
     {
-        return this.api.execute(this.actions.wallets+walletId+this.actions.transactions, "GET", {});
+        sinceId = sinceId || null;
+        maxId = maxId || null;
+        count = count || null;
+        
+        var data = {};
+        
+        if(sinceId !== null) {
+            data.since_id = sinceId;
+        }
+        
+        if(maxId !== null) {
+            data.max_id = maxId;
+        }
+        
+        if(count !== null) {
+            data.count = count;
+        }
+        
+        return this.api.execute(this.actions.wallets+walletId+this.actions.transactions, "GET", data);
     },
     
     /**
@@ -1122,7 +1207,7 @@ beepsend.api.prototype = {
     buildRequestUrl: function(path) {
         path = path || '';
         var apiToken = (this.hlr) ? this.parameters.api_hlr_token : this.parameters.api_token;
-        var url = this.parameters.api_protocol+this.parameters.api_url+":"+this.parameters.api_port+'/'+this.parameters.api_version+path+"?api_token="+apiToken;
+        var url = this.parameters.api_protocol+this.parameters.api_url+/*":"+this.parameters.api_port+*/'/'+this.parameters.api_version+path+"?api_token="+apiToken;
         return url;
     },
     
@@ -1159,20 +1244,19 @@ beepsend.api.prototype = {
             var qs = (this.serialize(data).length > 0) ? '&'+this.serialize(data) : this.serialize(data);
             fullResourceUrl = fullResourceUrl+qs;
         }
-        
+                
         xhr.open(type, fullResourceUrl, true);
-        
+
         if(type == "POST" || type == "PUT" || type == "DELETE") {
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 //            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
-//            xhr.setRequestHeader("Content-length", data.length);
+//            xhr.setRequestHeader("Content-length", JSON.stringify(data).length);
             xhr.send(this.serialize(data));
         }
         
         else {
             xhr.send();
         }       
-        
         xhr.onreadystatechange = function() {
             if(xhr.readyState == 4) {
                 if(xhr.status == 200 || xhr.status == 201 || xhr.status == 204) {
