@@ -1206,8 +1206,7 @@ beepsend.api.prototype = {
      */
     buildRequestUrl: function(path) {
         path = path || '';
-        var apiToken = (this.hlr) ? this.parameters.api_hlr_token : this.parameters.api_token;
-        var url = this.parameters.api_protocol+this.parameters.api_url+/*":"+this.parameters.api_port+*/'/'+this.parameters.api_version+path+"?api_token="+apiToken;
+        var url = this.parameters.api_protocol+this.parameters.api_url+/*":"+this.parameters.api_port+*/'/'+this.parameters.api_version+path;
         return url;
     },
     
@@ -1240,18 +1239,19 @@ beepsend.api.prototype = {
         
         var fullResourceUrl = this.buildRequestUrl(resource);
         
-        if(type== "GET") {
-            var qs = (this.serialize(data).length > 0) ? '&'+this.serialize(data) : this.serialize(data);
+        if(type == "GET") {
+            var qs = (this.serialize(data).length > 0) ? '?'+this.serialize(data) : this.serialize(data);
             fullResourceUrl = fullResourceUrl+qs;
         }
                 
         xhr.open(type, fullResourceUrl, true);
+        
+        xhr.setRequestHeader('Authorization', 'Token '+this.parameters.api_token);
+        xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
 
         if(type == "POST" || type == "PUT" || type == "DELETE") {
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-//            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
-//            xhr.setRequestHeader("Content-length", JSON.stringify(data).length);
-            xhr.send(this.serialize(data));
+            xhr.setRequestHeader("Content-length", JSON.stringify(data).length);
+            xhr.send(JSON.stringify(data));
         }
         
         else {
@@ -1279,15 +1279,26 @@ beepsend.api.prototype = {
      */
     resourceJquery: function(resource, type, data) {
        
-       var deferred = new beepsend.Deferred();
+        var deferred = new beepsend.Deferred();
         /* Generate full url for api call */
         var fullResourceUrl = this.buildRequestUrl(resource);
+        var processData = (type == "GET") ? true : false;
+        if(type == "GET") {
+            data = data;
+        } else {
+            data = JSON.stringify(data);
+        }
         
         /* Execute ajax call */
         $.ajax({
             type: type,
             url: fullResourceUrl,
+            headers: {
+                'Authorization': 'Token '+this.parameters.api_token,
+                'Content-type' : 'application/json; charset=utf-8'
+            },
             crossDomain: true,
+            processData: processData,
             dataType: 'json',
             async: true,
             data: data,
