@@ -626,7 +626,7 @@ beepsend.contact.prototype = {
         reader.readAsText(file);
         reader.onload = function(event) {
            var fileContent = event.target.result;
-           that.api.resourceRaw(that.actions.groups+groupId+that.actions.upload, "POST", fileContent);
+           that.api.fileUpload(that.actions.groups+groupId+that.actions.upload, "POST", fileContent);
         };
     }
     
@@ -1250,7 +1250,6 @@ beepsend.api.prototype = {
         xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
 
         if(type == "POST" || type == "PUT" || type == "DELETE") {
-            xhr.setRequestHeader("Content-length", JSON.stringify(data).length);
             xhr.send(JSON.stringify(data));
         }
         
@@ -1260,7 +1259,64 @@ beepsend.api.prototype = {
         xhr.onreadystatechange = function() {
             if(xhr.readyState == 4) {
                 if(xhr.status == 200 || xhr.status == 201 || xhr.status == 204) {
-                    deferred.resolve(JSON.parse(xhr.response));
+                    switch(xhr.status) {
+                        case 200:
+                        case 201:
+                            deferred.resolve(JSON.parse(xhr.response));
+                            break;
+                        case 204:
+                            deferred.resolve({});
+                            break;
+                        default:
+                            deferred.resolve(JSON.parse(xhr.response));
+                    }
+                } else {
+                    deferred.reject(xhr);
+                }
+            }            
+        };
+        return deferred.promise;
+    },
+    
+    fileUpload: function(resource, type, data)
+    {
+        if (window.XMLHttpRequest){
+            var xhr = new XMLHttpRequest();   
+        } else {
+            var xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        };
+        
+        var deferred = new beepsend.Deferred();
+        
+        var fullResourceUrl = this.buildRequestUrl(resource);
+        
+        if(type == "GET") {
+            var qs = (this.serialize(data).length > 0) ? '?'+this.serialize(data) : this.serialize(data);
+            fullResourceUrl = fullResourceUrl+qs;
+        }
+                
+        xhr.open(type, fullResourceUrl, true);
+        
+        xhr.setRequestHeader('Authorization', 'Token '+this.parameters.api_token);
+
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(data);
+        
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState == 4) {
+                if(xhr.status == 200 || xhr.status == 201 || xhr.status == 204) {
+                    switch(xhr.status) {
+                        case 200:
+                        case 201:
+                            deferred.resolve(JSON.parse(xhr.response));
+                            break;
+                        case 204:
+                            deferred.resolve({});
+                            break;
+                        default:
+                            deferred.resolve(JSON.parse(xhr.response));
+                    }
+                    
                 } else {
                     deferred.reject(xhr);
                 }
@@ -1308,29 +1364,7 @@ beepsend.api.prototype = {
         
         return deferred.promise;
     },
-    
-    resourceRaw: function(resource, type, data, callback, error) {
-        /* Set default handler functions */
-        callback = callback || this.successCallback;
-        error = error || this.errorCallback;
         
-        /* Generate full url for api call */
-        var fullResourceUrl = this.buildRequestUrl(resource);
-        
-        /* Execute ajax call */
-        $.ajax({
-            type: type,
-            url: fullResourceUrl,
-            crossDomain: true,
-            dataType: 'json',
-            async: true,
-            data: {"raw" : data},
-//            processData: false,
-            success: callback,
-            error: error
-        });
-    },
-    
     /**
      * Function for serializing json object to query string
      * @param {object} obj - object that we want to serialize
