@@ -154,7 +154,7 @@ beepsend.user.prototype = {
      * Get user details
      * @returns {object} - user object
      */
-    data: function()
+    get: function()
     {
         return this.api.execute(this.actions.users+this.user, "GET", {});
     },
@@ -385,7 +385,7 @@ beepsend.connection.prototype = {
      * @param {string} connection - connection id or "me" string
      * @returns {undefined}
      */
-    data: function(connection)
+    get: function(connection)
     {
         connection = connection || 'me';
         return this.api.execute(this.actions.connections+connection, "GET", {});
@@ -648,7 +648,7 @@ beepsend.customer.prototype = {
      * Get customer informations
      * @returns {object}
      */
-    data: function()
+    get: function()
     {
         return this.api.execute(this.actions.data, "GET", {});
     }
@@ -1023,7 +1023,7 @@ beepsend.wallet.prototype = {
      * @param {int} walletId - id of wallet that we want to get
      * @returns {object}
      */
-    data: function(walletId)
+    get: function(walletId)
     {
         return this.api.execute(this.actions.wallets+walletId, "GET", {});
     },
@@ -1206,7 +1206,7 @@ beepsend.api.prototype = {
      */
     buildRequestUrl: function(path) {
         path = path || '';
-        var url = this.parameters.api_protocol+this.parameters.api_url+/*":"+this.parameters.api_port+*/'/'+this.parameters.api_version+path;
+        var url = this.parameters.api_protocol+this.parameters.api_url+":"+this.parameters.api_port+'/'+this.parameters.api_version+path;
         return url;
     },
     
