@@ -56,11 +56,11 @@ beepsend.prototype = (function() {
         
         /**
          * Get contact resource
-         * @returns {beepsend.contact}
+         * @returns {beepsend.contacts}
          */
-        contact: function()
+        contacts: function()
         {
-            return new beepsend.contact(this);
+            return new beepsend.contacts(this);
         },
         
         /**
@@ -92,11 +92,11 @@ beepsend.prototype = (function() {
         
         /**
          * Get message resource
-         * @returns {beepsend.message}
+         * @returns {beepsend.messages}
          */
-        message: function()
+        messages: function()
         {
-            return new beepsend.message(this);
+            return new beepsend.messages(this);
         },
         
         /**
@@ -428,7 +428,7 @@ beepsend.connection.prototype = {
     
 };
 
-beepsend.contact = function(bs)
+beepsend.contacts = function(bs)
 {
     this.parameters = bs.parameters;
     this.api = bs.api;
@@ -441,7 +441,7 @@ beepsend.contact = function(bs)
     
 };
 
-beepsend.contact.prototype = {
+beepsend.contacts.prototype = {
     
     /**
      * Get all contact belonging to your user
@@ -714,7 +714,7 @@ beepsend.hlr.prototype = {
     
 };
 
-beepsend.message = function(bs)
+beepsend.messages = function(bs)
 {
     this.parameters = bs.parameters;
     this.api = bs.api;
@@ -727,7 +727,7 @@ beepsend.message = function(bs)
     };
 };
 
-beepsend.message.prototype = {
+beepsend.messages.prototype = {
     
         /**
          * Send SMS message
