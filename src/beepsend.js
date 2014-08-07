@@ -662,7 +662,7 @@ beepsend.hlr = function(bs)
     
     this.actions = {
         'hlr' : '/hlr/',
-        'validate' : '/hlr/validate'
+        'validate' : '/hlr/validate/'
     };
 };
 
