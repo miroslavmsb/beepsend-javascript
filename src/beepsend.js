@@ -315,7 +315,7 @@ beepsend.analytic.prototype = {
      */
     network: function(connection, fromDate, toDate, MCC, MNC)
     {
-        connection = connection || null;
+        connection = connection || "";
         fromDate = fromDate || null;
         toDate = toDate || null;
         MCC = MCC || null;
