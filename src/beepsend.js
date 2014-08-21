@@ -488,7 +488,7 @@ beepsend.contacts.prototype = {
      * @param {string} groupId
      * @returns {object} created contact object
      */
-    add: function(msisdn, firstName, lastName, groupId)
+    add: function(msisdn, firstName, lastName, groups)
     {
         firstName = firstName || null;
         lastName = lastName || null;
@@ -506,8 +506,8 @@ beepsend.contacts.prototype = {
             data.lastname = lastName;
         }
         
-        if(groupId !== null) {
-            data.group_id = groupId;
+        if(groups !== null) {
+            data.groups = groups;
         }
         
         return this.api.execute(this.actions.contacts, "POST", data);
