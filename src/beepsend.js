@@ -492,7 +492,7 @@ beepsend.contacts.prototype = {
     {
         firstName = firstName || null;
         lastName = lastName || null;
-        groupId = groupId || null;
+        groups = groups || null;
         
         var data = {
             'msisdn' : msisdn
