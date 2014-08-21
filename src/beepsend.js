@@ -758,6 +758,18 @@ beepsend.messages.prototype = {
         },
         
         /**
+         * Send multiple messages to one or more receivers
+         * @param {type} messages - beepsend.messagesHelper
+         * @param {type} connection - Connection id to use for sending sms
+         * @returns {beepsend.messages.prototype@pro;api@call;execute}
+         */
+        multiple: function(messages, connection)
+        {
+            connection = connection || "";
+            return this.api.execute(this.actions.sms+connection, "POST", messages.get());
+        },
+        
+        /**
          * Send Binary SMS
          * @param {int|string} from - phone number we are sending from or text 
          * @param {int|array} to - Number of recipient or array with recipient numbers
@@ -1525,4 +1537,37 @@ beepsend.InternalError = function(msg)
         message:     msg, 
         toString:    function(){return this.name + ": " + this.message;} 
     }; 
+};
+
+beepsend.messagesHelper = function() {
+    
+    this.messagesBuffer = [];
+    
+};
+
+beepsend.messagesHelper.prototype = {
+//    messagesBuffer: [],
+    message: function(from, to, message, connection, encoding, options)
+    {
+        connection = connection || "";
+        encoding = encoding || "UTF-8";
+        options = options || {};
+        var data = {
+            'from' : from,
+            'to' : to,
+            'message' : message,
+            'encoding' : encoding,
+            'receive_dlr' : 0
+        };
+
+        /* extend data object with aditional options for sending sms */
+        data = beepsend.extend(data, options);
+
+        this.messagesBuffer.push(data);
+    },
+
+    get: function()
+    {
+        return this.messagesBuffer;
+    }
 };
