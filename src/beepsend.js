@@ -332,11 +332,11 @@ beepsend.analytic.prototype = {
         }
         
         if(MCC !== null) {
-            data.MCC = MCC;
+            data.mcc = MCC;
         }
         
         if(MNC !== null) {
-            data.MNC = MNC;
+            data.mnc = MNC;
         }
         
         return this.api.execute(this.actions.network+connection, "GET", data);
