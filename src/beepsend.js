@@ -1546,7 +1546,6 @@ beepsend.messagesHelper = function() {
 };
 
 beepsend.messagesHelper.prototype = {
-//    messagesBuffer: [],
     message: function(from, to, message, connection, encoding, options)
     {
         connection = connection || "";
