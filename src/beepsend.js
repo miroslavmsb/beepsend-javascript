@@ -626,7 +626,7 @@ beepsend.contacts.prototype = {
         reader.readAsText(file);
         reader.onload = function(event) {
            var fileContent = event.target.result;
-           that.api.fileUpload(that.actions.groups+groupId+that.actions.upload, "POST", fileContent);
+           return that.api.fileUpload(that.actions.groups+groupId+that.actions.upload, "POST", fileContent);
         };
     }
     
