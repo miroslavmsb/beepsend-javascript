@@ -5,13 +5,17 @@ This repository contains source code of JavaScript helper library, that allows y
 
 ## Installation
 
-For using this library you can clone it from github
+Instalation of this library is available trough [Bower](http://bower.io/ 'Bower is a package manager for the web') package manager.
+
+    bower install beepsend-javascript --save
+
+or you can clone it with [git](http://git-scm.com/) from our repository
 
     git clone git@github.com:beepsend/beepsend-javascript.git
 
-or you can download .zip archive
+or download .zip archive
 
-[https://github.com/beepsend/beepsend-javascript/archive/master.zip](https://github.com/beepsend/beepsend-javascript/archive/master.zip)
+[Zip archive](https://github.com/beepsend/beepsend-javascript/archive/master.zip)
 
 After that you need to include beepsend JavaScript library to your project
 
