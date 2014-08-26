@@ -315,7 +315,7 @@ beepsend.analytic.prototype = {
      */
     network: function(connection, fromDate, toDate, MCC, MNC)
     {
-        connection = connection || null;
+        connection = connection || "";
         fromDate = fromDate || null;
         toDate = toDate || null;
         MCC = MCC || null;
@@ -332,11 +332,11 @@ beepsend.analytic.prototype = {
         }
         
         if(MCC !== null) {
-            data.MCC = MCC;
+            data.mcc = MCC;
         }
         
         if(MNC !== null) {
-            data.MNC = MNC;
+            data.mnc = MNC;
         }
         
         return this.api.execute(this.actions.network+connection, "GET", data);
@@ -488,11 +488,11 @@ beepsend.contacts.prototype = {
      * @param {string} groupId
      * @returns {object} created contact object
      */
-    add: function(msisdn, firstName, lastName, groupId)
+    add: function(msisdn, firstName, lastName, groups)
     {
         firstName = firstName || null;
         lastName = lastName || null;
-        groupId = groupId || null;
+        groups = groups || null;
         
         var data = {
             'msisdn' : msisdn
@@ -506,8 +506,8 @@ beepsend.contacts.prototype = {
             data.lastname = lastName;
         }
         
-        if(groupId !== null) {
-            data.group_id = groupId;
+        if(groups !== null) {
+            data.groups = groups;
         }
         
         return this.api.execute(this.actions.contacts, "POST", data);
@@ -626,7 +626,7 @@ beepsend.contacts.prototype = {
         reader.readAsText(file);
         reader.onload = function(event) {
            var fileContent = event.target.result;
-           that.api.fileUpload(that.actions.groups+groupId+that.actions.upload, "POST", fileContent);
+           return that.api.fileUpload(that.actions.groups+groupId+that.actions.upload, "POST", fileContent);
         };
     }
     
@@ -662,7 +662,7 @@ beepsend.hlr = function(bs)
     
     this.actions = {
         'hlr' : '/hlr/',
-        'validate' : '/hlr/validate'
+        'validate' : '/hlr/validate/'
     };
 };
 
@@ -755,6 +755,18 @@ beepsend.messages.prototype = {
             data = beepsend.extend(data, options);
             
             return this.api.execute(this.actions.sms+connection, "POST", data);
+        },
+        
+        /**
+         * Send multiple messages to one or more receivers
+         * @param {type} messages - beepsend.messagesHelper
+         * @param {type} connection - Connection id to use for sending sms
+         * @returns {beepsend.messages.prototype@pro;api@call;execute}
+         */
+        multiple: function(messages, connection)
+        {
+            connection = connection || "";
+            return this.api.execute(this.actions.sms+connection, "POST", messages.get());
         },
         
         /**
@@ -1525,4 +1537,35 @@ beepsend.InternalError = function(msg)
         message:     msg, 
         toString:    function(){return this.name + ": " + this.message;} 
     }; 
+};
+
+beepsend.messagesHelper = function() {
+    
+    this.messagesBuffer = [];
+    
+};
+
+beepsend.messagesHelper.prototype = {
+    message: function(from, to, message, encoding, options)
+    {
+        encoding = encoding || "UTF-8";
+        options = options || {};
+        var data = {
+            'from' : from,
+            'to' : to,
+            'message' : message,
+            'encoding' : encoding,
+            'receive_dlr' : 0
+        };
+
+        /* extend data object with aditional options for sending sms */
+        data = beepsend.extend(data, options);
+
+        this.messagesBuffer.push(data);
+    },
+
+    get: function()
+    {
+        return this.messagesBuffer;
+    }
 };
