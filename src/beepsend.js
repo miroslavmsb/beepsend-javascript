@@ -364,7 +364,8 @@ beepsend.connection = function(bs)
     this.actions = {
         'connections' : '/connections/',
         'tokenreset' : '/tokenreset',
-        'passwordreset' : '/passwordreset'
+        'passwordreset' : '/passwordreset',
+        'recipientnumbers' : '/numbers/'
     };
     
 };
@@ -424,6 +425,11 @@ beepsend.connection.prototype = {
     {
         connection = connection || "me";
         return this.api.execute(this.actions.connection+connection+this.actions.passwordreset, "GET", {});
+    },
+    
+    recipientNumbers: function()
+    {
+        return this.api.execute(this.actions.recipientnumbers, "GET", {});
     }
     
 };
