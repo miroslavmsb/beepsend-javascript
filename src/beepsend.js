@@ -427,6 +427,10 @@ beepsend.connection.prototype = {
         return this.api.execute(this.actions.connection+connection+this.actions.passwordreset, "GET", {});
     },
     
+    /**
+     * Recipient numbers for default connection
+     * @returns {beepsend.connection.prototype@pro;api@call;execute}
+     */
     recipientNumbers: function()
     {
         return this.api.execute(this.actions.recipientnumbers, "GET", {});
@@ -941,7 +945,8 @@ beepsend.pricelist = function(bs)
     this.actions = {
         'connections' : '/connections/',
         'pricelists' : '/pricelists/current',
-        'download' : '/pricelists/'
+        'download' : '/pricelists/',
+        'diff' : '/diff'        
     };
 };
 
@@ -956,7 +961,61 @@ beepsend.pricelist.prototype = {
     {
         connection = connection || "me";
         return this.api.execute(this.actions.connections+connection+this.actions.pricelists, "GET", {});
-    }   
+    },
+    
+    /**
+     * Get pricelist revisions
+     * @param {type} connection
+     * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
+     */
+    getRevisions: function(connection)
+    {
+        connection = connection || "me";
+        return this.api.execute(this.actions.connections+connection+this.actions.download, "GET", {});
+    },
+    
+    /**
+     * Download pricelist for provided connection id
+     * @param {type} connection - id of connection
+     * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
+     */
+    download: function(connection)
+    {
+        var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+this.actions.download+connection+'.csv?api_token='+this.parameters.api_token;
+        window.location.assign(url);
+    },
+    
+    /**
+     * Compare differences from 2 pricelists
+     * @param {type} connection - connection id
+     * @param {type} rev1 - id of first pricelist to compare
+     * @param {type} rev2 - id of second pricelist to compare
+     * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
+     */
+    pricelistsDiff: function(connection, rev1, rev2)
+    {
+        connection = connection || "";
+        rev1 = rev1 || "";
+        rev2 = rev2 || "";
+        return this.api.execute(this.actions.download+connection+'/'+rev1+'..'+rev2+this.actions.diff, "GET");
+    },
+    
+    /**
+     * Download differences of compared pricelists
+     * @param {type} connection - connection id
+     * @param {type} rev1 - id of first pricelist to compare
+     * @param {type} rev2 - id of second pricelist to compare
+     */
+    pricelistsDiffDownload: function(connection, rev1, rev2)
+    {
+        connection = connection || "";
+        rev1 = rev1 || "";
+        rev2 = rev2 || "";
+        
+        var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+this.actions.download+connection+'/'+rev1+'..'+rev2+this.actions.diff+'.csv?api_token='+this.parameters.api_token;
+        window.location.assign(url);
+        
+    }
     
 };
 
