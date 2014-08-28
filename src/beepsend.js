@@ -1,6 +1,6 @@
 /**
  * Beepsend JavaScript Library
- * @version 0.1
+ * @version 1.0.0
  * @param {object} params - initialization parameters
  * @author Miroslav Milosevic <miroslav.milosevic@htec.rs>
  */
