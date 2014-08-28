@@ -899,12 +899,14 @@ beepsend.messages.prototype = {
         /**
          * Get two way batch
          * @param {int|string} batchId - id of messages batch
+         * @param {object} - options object
          * @returns {object}
          */
-        twoWayBatch: function(batchId)
+        twoWayBatch: function(batchId, options)
         {
             batchId = batchId || '';
-            return this.api.execute(this.actions.batches+batchId+this.actions.messages, "GET", {});
+            options = options || {};
+            return this.api.execute(this.actions.batches+batchId+this.actions.messages, "GET", options);
         },
         
         /**
@@ -960,12 +962,14 @@ beepsend.messages.prototype = {
         /**
          * Get specific conversation
          * @param {int|string} conversationId - id of conversation
+         * @param {options} - aditional options
          * @returns {object}
          */
-        conversation: function(conversationId)
+        conversation: function(conversationId, options)
         {
             conversationId = conversationId || "";
-            return this.api.execute(this.actions.conversations+conversationId, "GET", {});
+            options = options || {};
+            return this.api.execute(this.actions.conversations+conversationId, "GET", options);
         }
     
 };
@@ -1010,11 +1014,26 @@ beepsend.pricelist.prototype = {
     /**
      * Download pricelist for provided connection id
      * @param {type} connection - id of connection
+     * @param {string} delimiter
+     * @param {string} fields - fields that we want to have in downloaded pricelist csv
      * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
      */
-    download: function(connection)
+    download: function(connection, delimiter, fields)
     {
+        connection = connection || "";
+        delimiter = delimiter || null;
+        fields = fields || null;
+        
         var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+this.actions.download+connection+'.csv?api_token='+this.parameters.api_token;
+        
+        if(delimiter !== null) {
+            url = url+"&delimiter="+delimiter;
+        }
+        
+        if(fields !== null) {
+            url = url+"&fields="+fields;
+        }
+        
         window.location.assign(url);
     },
     
@@ -1038,14 +1057,27 @@ beepsend.pricelist.prototype = {
      * @param {type} connection - connection id
      * @param {type} rev1 - id of first pricelist to compare
      * @param {type} rev2 - id of second pricelist to compare
+     * @param {string} delimiter
+     * @param {string} fields - fields that we want to have in downloaded pricelist csv
      */
-    diffDownload: function(connection, rev1, rev2)
+    diffDownload: function(connection, rev1, rev2, delimiter, fields)
     {
         connection = connection || "";
         rev1 = rev1 || "";
         rev2 = rev2 || "";
+        delimiter = delimiter || null;
+        fields = fields || null;
         
         var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+this.actions.download+connection+'/'+rev1+'..'+rev2+this.actions.diff+'.csv?api_token='+this.parameters.api_token;
+        
+        if(delimiter !== null) {
+            url = url+"&delimiter="+delimiter;
+        }
+        
+        if(fields !== null) {
+            url = url+"&fields="+fields;
+        }
+        
         window.location.assign(url);
         
     }
