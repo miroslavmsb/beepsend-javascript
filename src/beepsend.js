@@ -733,7 +733,9 @@ beepsend.messages = function(bs)
         'sms' : '/sms/',
         'validate' : '/sms/validate/',
         'batches' : '/batches/',
-        'estimation' : 'costestimate/'
+        'estimation' : 'costestimate/',
+        'messages' : '/messages/',
+        'conversations' : '/conversations/'
     };
 };
 
@@ -895,6 +897,17 @@ beepsend.messages.prototype = {
         },
         
         /**
+         * Get two way batch
+         * @param {int|string} batchId - id of messages batch
+         * @returns {object}
+         */
+        twoWayBatch: function(batchId)
+        {
+            batchId = batchId || '';
+            return this.api.execute(this.actions.batches+batchId+this.actions.messages, "GET", {});
+        },
+        
+        /**
          * Estimate SMS cost
          * @param {int|array} to - Number of recipient or array with recipient numbers
          * @param {string} message - text message
@@ -933,8 +946,28 @@ beepsend.messages.prototype = {
             };
             
             return this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data);
-        }
+        },
         
+        /**
+         * Get all conversations
+         * @returns {object}
+         */
+        conversations: function() 
+        {
+            return this.api.execute(this.actions.conversations, "GET", {});
+        },
+        
+        /**
+         * Get specific conversation
+         * @param {int|string} conversationId - id of conversation
+         * @returns {object}
+         */
+        conversation: function(conversationId)
+        {
+            conversationId = conversationId || "";
+            return this.api.execute(this.actions.conversations+conversationId, "GET", {});
+        }
+    
 };
 
 beepsend.pricelist = function(bs)
@@ -992,7 +1025,7 @@ beepsend.pricelist.prototype = {
      * @param {type} rev2 - id of second pricelist to compare
      * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
      */
-    pricelistsDiff: function(connection, rev1, rev2)
+    diff: function(connection, rev1, rev2)
     {
         connection = connection || "";
         rev1 = rev1 || "";
@@ -1006,7 +1039,7 @@ beepsend.pricelist.prototype = {
      * @param {type} rev1 - id of first pricelist to compare
      * @param {type} rev2 - id of second pricelist to compare
      */
-    pricelistsDiffDownload: function(connection, rev1, rev2)
+    diffDownload: function(connection, rev1, rev2)
     {
         connection = connection || "";
         rev1 = rev1 || "";
