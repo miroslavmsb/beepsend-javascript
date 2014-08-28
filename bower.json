@@ -1,0 +1,22 @@
+{
+  "name": "beepsend-javascript",
+  "version": "1.0.0",
+  "homepage": "https://github.com/beepsend/beepsend-javascript",
+  "authors": [
+    "Miroslav Milosevic <miroslav.milosevic@htec.rs>"
+  ],
+  "description": "A JavaScript helper library to connect to Beepsend API",
+  "main": "src/beepsend.js",
+  "keywords": [
+    "Beepsend",
+    "sms"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
