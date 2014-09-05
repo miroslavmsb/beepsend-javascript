@@ -1,6 +1,6 @@
 /**
  * Beepsend JavaScript Library
- * @version 0.1
+ * @version 1.0.0
  * @param {object} params - initialization parameters
  * @author Miroslav Milosevic <miroslav.milosevic@htec.rs>
  */
@@ -364,7 +364,8 @@ beepsend.connection = function(bs)
     this.actions = {
         'connections' : '/connections/',
         'tokenreset' : '/tokenreset',
-        'passwordreset' : '/passwordreset'
+        'passwordreset' : '/passwordreset',
+        'recipientnumbers' : '/numbers/'
     };
     
 };
@@ -424,6 +425,15 @@ beepsend.connection.prototype = {
     {
         connection = connection || "me";
         return this.api.execute(this.actions.connection+connection+this.actions.passwordreset, "GET", {});
+    },
+    
+    /**
+     * Recipient numbers for default connection
+     * @returns {beepsend.connection.prototype@pro;api@call;execute}
+     */
+    recipientNumbers: function()
+    {
+        return this.api.execute(this.actions.recipientnumbers, "GET", {});
     }
     
 };
@@ -723,7 +733,9 @@ beepsend.messages = function(bs)
         'sms' : '/sms/',
         'validate' : '/sms/validate/',
         'batches' : '/batches/',
-        'estimation' : 'costestimate/'
+        'estimation' : 'costestimate/',
+        'messages' : '/messages/',
+        'conversations' : '/conversations/'
     };
 };
 
@@ -885,6 +897,19 @@ beepsend.messages.prototype = {
         },
         
         /**
+         * Get two way batch
+         * @param {int|string} batchId - id of messages batch
+         * @param {object} - options object
+         * @returns {object}
+         */
+        twoWayBatch: function(batchId, options)
+        {
+            batchId = batchId || '';
+            options = options || {};
+            return this.api.execute(this.actions.batches+batchId+this.actions.messages, "GET", options);
+        },
+        
+        /**
          * Estimate SMS cost
          * @param {int|array} to - Number of recipient or array with recipient numbers
          * @param {string} message - text message
@@ -923,8 +948,30 @@ beepsend.messages.prototype = {
             };
             
             return this.api.execute(this.actions.sms+this.actions.estimation+connection, "POST", data);
-        }
+        },
         
+        /**
+         * Get all conversations
+         * @returns {object}
+         */
+        conversations: function() 
+        {
+            return this.api.execute(this.actions.conversations, "GET", {});
+        },
+        
+        /**
+         * Get specific conversation
+         * @param {int|string} conversationId - id of conversation
+         * @param {options} - aditional options
+         * @returns {object}
+         */
+        conversation: function(conversationId, options)
+        {
+            conversationId = conversationId || "";
+            options = options || {};
+            return this.api.execute(this.actions.conversations+conversationId, "GET", options);
+        }
+    
 };
 
 beepsend.pricelist = function(bs)
@@ -935,7 +982,8 @@ beepsend.pricelist = function(bs)
     this.actions = {
         'connections' : '/connections/',
         'pricelists' : '/pricelists/current',
-        'download' : '/pricelists/'
+        'download' : '/pricelists/',
+        'diff' : '/diff'        
     };
 };
 
@@ -950,7 +998,91 @@ beepsend.pricelist.prototype = {
     {
         connection = connection || "me";
         return this.api.execute(this.actions.connections+connection+this.actions.pricelists, "GET", {});
-    }   
+    },
+    
+    /**
+     * Get pricelist revisions
+     * @param {type} connection
+     * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
+     */
+    getRevisions: function(connection)
+    {
+        connection = connection || "me";
+        return this.api.execute(this.actions.connections+connection+this.actions.download, "GET", {});
+    },
+    
+    /**
+     * Download pricelist for provided connection id
+     * @param {type} connection - id of connection
+     * @param {string} delimiter
+     * @param {string} fields - fields that we want to have in downloaded pricelist csv
+     * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
+     */
+    download: function(connection, delimiter, fields)
+    {
+        connection = connection || "";
+        delimiter = delimiter || null;
+        fields = fields || null;
+        var params = {};
+        
+        if(delimiter !== null) {
+            params.delimiter = delimiter;
+        }
+        
+        if(fields !== null) {
+            params.fields = fields;
+        }
+
+        var url = this.api.buildRequestUrlWithParams(this.actions.download+connection+'.csv', params);
+        
+        window.location.assign(url);
+    },
+    
+    /**
+     * Compare differences from 2 pricelists
+     * @param {type} connection - connection id
+     * @param {type} rev1 - id of first pricelist to compare
+     * @param {type} rev2 - id of second pricelist to compare
+     * @returns {beepsend.pricelist.prototype@pro;api@call;execute}
+     */
+    diff: function(connection, rev1, rev2)
+    {
+        connection = connection || "";
+        rev1 = rev1 || "";
+        rev2 = rev2 || "";
+        return this.api.execute(this.actions.download+connection+'/'+rev1+'..'+rev2+this.actions.diff, "GET");
+    },
+    
+    /**
+     * Download differences of compared pricelists
+     * @param {type} connection - connection id
+     * @param {type} rev1 - id of first pricelist to compare
+     * @param {type} rev2 - id of second pricelist to compare
+     * @param {string} delimiter
+     * @param {string} fields - fields that we want to have in downloaded pricelist csv
+     */
+    diffDownload: function(connection, rev1, rev2, delimiter, fields)
+    {
+        connection = connection || "";
+        rev1 = rev1 || "";
+        rev2 = rev2 || "";
+        delimiter = delimiter || null;
+        fields = fields || null;
+        var params = {};
+        
+        if(delimiter !== null) {
+            params.delimiter = delimiter;
+        }
+        
+        if(fields !== null) {
+            params.fields = fields;
+        }
+        
+        var url = this.api.buildRequestUrlWithParams(this.actions.download+connection+'/'+rev1+'..'+rev2+this.actions.diff+'.csv', params);
+        
+        window.location.assign(url);
+        
+    }
     
 };
 
@@ -1219,6 +1351,20 @@ beepsend.api.prototype = {
     buildRequestUrl: function(path) {
         path = path || '';
         var url = this.parameters.api_protocol+this.parameters.api_url+":"+this.parameters.api_port+'/'+this.parameters.api_version+path;
+        return url;
+    },
+    
+    buildRequestUrlWithParams: function(path, params)
+    {
+        path = path || '';
+        params = params || {};
+        
+        var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+path+"?api_token="+this.parameters.api_token;
+        
+        if(this.serialize(params).length > 0) {
+            url = url+"&"+this.serialize(params);
+        }
+        
         return url;
     },
     
