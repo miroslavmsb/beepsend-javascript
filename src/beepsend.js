@@ -1023,16 +1023,17 @@ beepsend.pricelist.prototype = {
         connection = connection || "";
         delimiter = delimiter || null;
         fields = fields || null;
-        
-        var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+this.actions.download+connection+'.csv?api_token='+this.parameters.api_token;
+        var params = {};
         
         if(delimiter !== null) {
-            url = url+"&delimiter="+delimiter;
+            params.delimiter = delimiter;
         }
         
         if(fields !== null) {
-            url = url+"&fields="+fields;
+            params.fields = fields;
         }
+
+        var url = this.api.buildRequestUrlWithParams(this.actions.download+connection+'.csv', params);
         
         window.location.assign(url);
     },
@@ -1067,16 +1068,17 @@ beepsend.pricelist.prototype = {
         rev2 = rev2 || "";
         delimiter = delimiter || null;
         fields = fields || null;
-        
-        var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+this.actions.download+connection+'/'+rev1+'..'+rev2+this.actions.diff+'.csv?api_token='+this.parameters.api_token;
+        var params = {};
         
         if(delimiter !== null) {
-            url = url+"&delimiter="+delimiter;
+            params.delimiter = delimiter;
         }
         
         if(fields !== null) {
-            url = url+"&fields="+fields;
+            params.fields = fields;
         }
+        
+        var url = this.api.buildRequestUrlWithParams(this.actions.download+connection+'/'+rev1+'..'+rev2+this.actions.diff+'.csv', params);
         
         window.location.assign(url);
         
@@ -1349,6 +1351,20 @@ beepsend.api.prototype = {
     buildRequestUrl: function(path) {
         path = path || '';
         var url = this.parameters.api_protocol+this.parameters.api_url+":"+this.parameters.api_port+'/'+this.parameters.api_version+path;
+        return url;
+    },
+    
+    buildRequestUrlWithParams: function(path, params)
+    {
+        path = path || '';
+        params = params || {};
+        
+        var url = this.parameters.api_protocol+this.parameters.api_url+'/'+this.parameters.api_version+path+"?api_token="+this.parameters.api_token;
+        
+        if(this.serialize(params).length > 0) {
+            url = url+"&"+this.serialize(params);
+        }
+        
         return url;
     },
     
