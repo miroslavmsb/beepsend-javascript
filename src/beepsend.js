@@ -709,16 +709,14 @@ beepsend.hlr.prototype = {
     /**
      * Validate HLR request
      * @param {int} msisdn - that we are looking HLR request
-     * @param {string} connection - connection id of HLR connection
      * @returns {object}
      */
-    validate: function(msisdn, connection)
+    validate: function(msisdn)
     {
-        connection = connection || "me";
         var data = {
             "msisdn" : msisdn,
-            "connection" : (connection) ? connection : "me"
         };
+        
         return this.api.execute(this.actions.validate, "POST", data);
     }
     
@@ -864,14 +862,12 @@ beepsend.messages.prototype = {
          * @param {int|string} from - phone number we are sending from or text 
          * @param {int|array} to - Number of recipient or array with recipient numbers
          * @param {string} message - text message
-         * @param {string} connection - Connection id to use for sending sms
          * @param {string} encoding - Encoding of message UTF-8, ISO-8859-15 or Unicode
          * @param {object} options - object of aditional options for sending sms. More info on: http://api.beepsend.com/docs.html#send-sms
          * @returns {object}
          */
-        validate: function(from, to, message, connection, encoding, options)
+        validate: function(from, to, message, encoding, options)
         {
-            connection = connection || "";
             encoding = encoding || "UTF-8";
             var data = {
                 'from' : from,
@@ -884,7 +880,7 @@ beepsend.messages.prototype = {
             /* extend data object with adtitional options for validating sms */
             data = beepsend.extend(data, options);
             
-            return this.api.execute(this.actions.validate+connection, "POST", data);
+            return this.api.execute(this.actions.validate, "POST", data);
         },
         
         /**
