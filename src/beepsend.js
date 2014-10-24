@@ -757,8 +757,7 @@ beepsend.messages.prototype = {
                 'from' : from,
                 'to' : to,
                 'message' : message,
-                'encoding' : encoding,
-                'receive_dlr' : 0
+                'encoding' : encoding
             };
             
             /* extend data object with aditional options for sending sms */
@@ -798,7 +797,6 @@ beepsend.messages.prototype = {
                 'to' : to,
                 'message' : message,
                 'encoding' : encoding,
-                'receive_dlr' : 0,
                 'message_type' : 'binary'
             };
             
@@ -826,8 +824,7 @@ beepsend.messages.prototype = {
                 'from' : from,
                 'groups' : groups,
                 'message' : message,
-                'encoding' : encoding,
-                'receive_dlr' : 0
+                'encoding' : encoding
             };
             
             /* extend data object with adtitional options for sending group sms */
@@ -873,8 +870,7 @@ beepsend.messages.prototype = {
                 'from' : from,
                 'to' : to,
                 'message' : message,
-                'encoding' : encoding,
-                'receive_dlr' : 0
+                'encoding' : encoding
             };
             
             /* extend data object with adtitional options for validating sms */
@@ -1696,8 +1692,7 @@ beepsend.messagesHelper.prototype = {
             'from' : from,
             'to' : to,
             'message' : message,
-            'encoding' : encoding,
-            'receive_dlr' : 0
+            'encoding' : encoding
         };
 
         /* extend data object with aditional options for sending sms */
